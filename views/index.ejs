@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -54,11 +55,12 @@
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="objetivos_espc" class="form-label">Objetivos espec&iacute;ficos</label>
-                    <textarea  class="form-control" id="objetivos_espc" rows="3" name="objetivos_espc"></textarea>
+                    <input  class="form-control" id="objetivos_espc" rows="3" name="objetivos_espc">
                   </div>
+                  <button class="btn btn-success" id="agregar_subcontrataciones"><i class="fa fa-plus"></i></button>
                  <!-- Input-->  
                   <div class="mb-3">
-                    <label for="alcance_proyecto" class="form-label">Alcence del proyecto</label>
+                    <label for="alcance_proyecto" class="form-label">Alcance del proyecto</label>
                     <textarea  class="form-control" id="alcance_proyecto" rows="3" name="alcance_proyecto"></textarea>
                   </div>
                  <!-- Input-->  
@@ -107,6 +109,7 @@
                     <label for="subcontrataciones" class="form-label">Subcontrataciones (nombre)</label>
                     <input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones">
                   </div>
+                  <button class="btn btn-success" id="agregar_subcontrataciones"><i class="fa fa-plus"></i></button>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="subcontrataciones_costo" class="form-label">Subcontrataciones (costo por proyecto)</label>
@@ -114,14 +117,36 @@
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
-                    <label for="acuerdos" class="form-label">Acuerdos entre cliente y tu</label>
+                    <label for="acuerdos" class="form-label">Acuerdos con cliente</label>
                     <textarea  class="form-control" id="acuerdos" rows="3" name="acuerdos"></textarea>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="gantt" class="form-label">Fases del proyecto GANTT</label>
-                    <textarea  class="form-control" id="gantt" rows="3" name="gantt"></textarea>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Actividad</th>
+                                <th scope="col">Inicio</th>
+                                <th scope="col">Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text">
+                                </td>
+                                <td>
+                                    <input type="date">
+                                </td>
+                                <td>
+                                    <input type="date">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                   </div>
+                  <button class="btn btn-success" id="agregar_actividad"><i class="fa fa-plus"></i></button>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="observaciones_gantt" class="form-label">Observaciones del cliente sobre GANTT</label>
@@ -137,7 +162,7 @@
                     <label for="tabla_responsabilidades" class="form-label">Tabla de responsabilidades cliente/desarrollador</label>
                     <textarea  class="form-control" id="tabla_responsabilidades" rows="3" name="tabla_responsabilidades"></textarea>
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-primary">Enviar</button>
                 </form>
             </div>
         </div>
@@ -178,5 +203,7 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
+

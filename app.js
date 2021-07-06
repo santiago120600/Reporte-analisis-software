@@ -4,13 +4,13 @@ const port = 3000;
 const path = require('path');
 const xlsx = require('xlsx');
 const bodyParser = require('body-parser');
+app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(express.static("public"));
 
 app.get('/', (req, res) => {
-    res.sendFile('index.html', {
-        root: path.join(__dirname, './views')
-    });
+    res.render('index');
 });
 
 app.listen(port, () => {
