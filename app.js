@@ -18,7 +18,7 @@ app.listen(port, () => {
 });
 
 app.post('/', urlencodedParser, function (req, res) {
-    console.log(req.body);
+    console.info(req.body);
     const nombre_cliente = req.body.nombre_cliente;
     const nombre_empresa  = req.body.nombre_empresa;   
     const email  = req.body.email;   
@@ -44,4 +44,20 @@ app.post('/', urlencodedParser, function (req, res) {
     const observaciones_gantt  = req.body.observaciones_gantt;   
     const subsecuencias_gantt  = req.body.nombre_empresa;   
     const tabla_responsabilidades  = req.body.tabla_responsabilidades;   
+    generarChecklist(objetivos_espc);
 });
+
+const generarChecklist = (lista_tareas) =>{
+    const workBook = xlsx.utils.book_new();
+    const checklist= [
+        ["Objetivo","Realizado"]
+    ];
+    lista_tareas.forEach(agregar_a_lista);
+    function agregar_a_lista(value){
+        checklist.push([value,""]);
+    }
+    var workSheet = xlsx.utils.aoa_to_sheet(checklist);
+    xlsx.utils.book_append_sheet(workBook,workSheet,'checklist');
+    xlsx.writeFile(workBook,path.resolve('./outputFiles/excelFile.xlsx'));
+}
+
