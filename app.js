@@ -55,10 +55,8 @@ app.post('/', urlencodedParser, function (req, res) {
     const actividad  = req.body.actividad;   
     const fecha_inicio_actividad  = req.body.fecha_inicio_actividad;   
     const fecha_termina_actividad  = req.body.fecha_termina_actividad; 
-    // generarGantt(actividad,fecha_inicio_actividad,fecha_termina_actividad);
 
-
-    // generarChecklist(objetivos_espc);
+    generarChecklist(objetivos_espc);
     return res.render('index',{actividad:actividad,fecha_inicio:fecha_inicio_actividad,fecha_termina:fecha_termina_actividad});
 });
 
@@ -76,13 +74,4 @@ const generarChecklist = (lista_tareas) =>{
     xlsx.writeFile(workBook,path.resolve('./outputFiles/excelFile.xlsx'));
 }
 
-const generarGantt = (actividad,fecha_inicio_actividad,fecha_termina_actividad) => {
-    const gantt_list = [
-        ["Actividad","Fecha Inicio","Fecha ternmina"]
-    ];
-    for (index = 0; index < actividad.length; index++) {
-        gantt_list.push([actividad[index],fecha_inicio_actividad[index],fecha_termina_actividad[index]]);
-    }
-    console.log(gantt_list);
-}
 

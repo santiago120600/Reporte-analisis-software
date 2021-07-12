@@ -201,7 +201,7 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
     </div>
     <div class="row mb-5">
       <div class="col">
-        <div style="" class="gantt" id="GanttChartDIV"></div>
+        <div style="margin-left: 60px;" class="gantt" id="GanttChartDIV"></div>
       </div>
     </div>
 
@@ -223,14 +223,22 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
         fecha_inicio ='<%=fecha_inicio%>'.split(',');
         fecha_termina = '<%=fecha_termina%>'.split(',');
         for (i = 0; i < actividad.length; i++) {
-          g.AddTaskItem(new JSGantt.TaskItem(1,actividad[i],fecha_inicio[i].replace(/\-/g,"/"),fecha_termina[i].replace(/\-/g,"/"),'ff6666'));
-          // console.log(actividad[i])
-          // console.log(fecha_inicio[i].replace(/\-/g,"/"));
-          // console.log(fecha_termina[i].replace(/\-/g,"/"));
+          g.AddTaskItem(new JSGantt.TaskItem(1,actividad[i],changeDateFormat(fecha_inicio[i]),changeDateFormat(fecha_termina[i]),'ff6666'));
         }
         // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
         g.Draw();	
         g.DrawDependencies();
+      }
+
+      function changeDateFormat(inputDate) {
+        var splitDate = inputDate.split('-');
+        if(splitDate.count == 0){
+            return null;
+        }
+        var year = splitDate[0];
+        var month = splitDate[1];
+        var day = splitDate[2]; 
+        return month + '/' + day + '/' + year;
       }
     </script>
 </body>
