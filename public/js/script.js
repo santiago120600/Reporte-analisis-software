@@ -14,4 +14,9 @@ $(function(){
         );
     });
 
+    $(document).on('click','#agregar_actividad',function(e){
+        e.preventDefault();
+        $('#table_actividades tr:last').after('<tr><td><input type="text" name="actividad"></td><td><input type="date" name="fecha_inicio_actividad"></td><td><input type="date" name="fecha_termina_actividad"></td></tr>');
+    });
+
 });
