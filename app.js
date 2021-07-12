@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index',{actividad:'',fecha_inicio:'',fecha_termina:''});
 });
 
 app.listen(port, () => {
@@ -25,7 +25,7 @@ app.listen(port, () => {
 });
 
 app.post('/', urlencodedParser, function (req, res) {
-    // console.info(req.body);
+    console.info(req.body);
     const nombre_cliente = req.body.nombre_cliente;
     const nombre_empresa  = req.body.nombre_empresa;   
     const email  = req.body.email;   
@@ -55,12 +55,11 @@ app.post('/', urlencodedParser, function (req, res) {
     const actividad  = req.body.actividad;   
     const fecha_inicio_actividad  = req.body.fecha_inicio_actividad;   
     const fecha_termina_actividad  = req.body.fecha_termina_actividad; 
-    generarGantt(actividad,fecha_inicio_actividad,fecha_termina_actividad);
+    // generarGantt(actividad,fecha_inicio_actividad,fecha_termina_actividad);
 
 
     // generarChecklist(objetivos_espc);
-    res.redirect('/');
-    res.end();
+    return res.render('index',{actividad:actividad,fecha_inicio:fecha_inicio_actividad,fecha_termina:fecha_termina_actividad});
 });
 
 const generarChecklist = (lista_tareas) =>{

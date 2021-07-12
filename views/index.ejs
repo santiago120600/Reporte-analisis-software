@@ -201,7 +201,7 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
     </div>
     <div class="row mb-5">
       <div class="col">
-        <div class="gantt" id="GanttChartDIV"></div>
+        <div style="" class="gantt" id="GanttChartDIV"></div>
       </div>
     </div>
 
@@ -212,16 +212,26 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
     <script src="js/jsgantt_v12/jsgantt.js"></script>
     <script src="js/script.js"></script>
     <script>
-      var g = new JSGantt.GanttChart('g',document.getElementById('GanttChartDIV'), 'day');
-      g.setShowRes(0); // Show/Hide Responsible (0/1)
-      g.setShowComp(0); // Show/Hide % Complete(0/1)
-      g.setDateDisplayFormat('mm/dd/yyyy') // Set format to display dates ('mm/dd/yyyy', 'dd/mm/yyyy', 'yyyy-mm-dd')
-      g.setFormatArr("day") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
-
-      g.AddTaskItem(new JSGantt.TaskItem(1,'Terminar gantt','2/10/2008','2/15/2008','ff6666'));
-      // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
-      g.Draw();	
-      g.DrawDependencies();
+      var condicion ='<%=actividad%>';
+      if(condicion){
+        var g = new JSGantt.GanttChart('g',document.getElementById('GanttChartDIV'), 'day');
+        g.setShowRes(0); // Show/Hide Responsible (0/1)
+        g.setShowComp(0); // Show/Hide % Complete(0/1)
+        g.setDateDisplayFormat('yyyy-mm-dd') // Set format to display dates ('mm/dd/yyyy', 'dd/mm/yyyy', 'yyyy-mm-dd')
+        g.setFormatArr("day") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
+        actividad = '<%=actividad%>'.split(',');
+        fecha_inicio ='<%=fecha_inicio%>'.split(',');
+        fecha_termina = '<%=fecha_termina%>'.split(',');
+        for (i = 0; i < actividad.length; i++) {
+          g.AddTaskItem(new JSGantt.TaskItem(1,actividad[i],fecha_inicio[i].replace(/\-/g,"/"),fecha_termina[i].replace(/\-/g,"/"),'ff6666'));
+          // console.log(actividad[i])
+          // console.log(fecha_inicio[i].replace(/\-/g,"/"));
+          // console.log(fecha_termina[i].replace(/\-/g,"/"));
+        }
+        // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
+        g.Draw();	
+        g.DrawDependencies();
+      }
     </script>
 </body>
 </html>
