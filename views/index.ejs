@@ -93,17 +93,24 @@
                     <label for="costo_venta" class="form-label">Costo de venta</label>
                     <input type="number" class="form-control" id="costo_venta" name="costo_venta">
                   </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="subcontrataciones" class="form-label">Subcontrataciones (nombre)</label>
-                    <input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones">
+                  <div class="row">
+                    <div class="col-8">
+                      <!-- Input-->  
+                       <div class="mb-3">
+                         <label for="subcontrataciones" class="form-label">Subcontrataciones (nombre)</label>
+                         <input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones">
+                       </div>
+                    </div>
+                    <div class="col-4">
+                      <!-- Input-->  
+                      <div class="mb-3">
+                        <label for="costo_subcontratacion" class="form-label">Costo de Subcontratacion</label>
+                        <input type="number" class="form-control" id="costo_subcontratacion" name="costo_subcontratacion">
+                      </div>
+                    </div>
                   </div>
                   <button class="btn btn-success" id="agregar_subcontrataciones"><i class="fa fa-plus"></i></button>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="subcontrataciones_costo" class="form-label">Subcontrataciones (costo por proyecto)</label>
-                    <input type="number" class="form-control" id="subcontrataciones_costo" name="subcontrataciones_costo">
-                  </div>
+
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="acuerdos" class="form-label">Acuerdos con cliente</label>
@@ -140,16 +147,6 @@
                   <div class="mb-3">
                     <label for="observaciones_gantt" class="form-label">Observaciones del cliente sobre GANTT</label>
                     <textarea  class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt"></textarea>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="subsecuencias_gantt" class="form-label">Tabla de sub-secuencias de GANTT</label>
-                    <textarea  class="form-control" id="subsecuencias_gantt" rows="3" name="subsecuencias_gantt"></textarea>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="tabla_responsabilidades" class="form-label">Tabla de responsabilidades cliente/desarrollador</label>
-                    <textarea  class="form-control" id="tabla_responsabilidades" rows="3" name="tabla_responsabilidades"></textarea>
                   </div>
                   <button type="submit" class="btn btn-primary">Enviar</button>
                 </form>
@@ -194,7 +191,7 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
     </div>
     <div class="row mb-5 mt-5">
       <div class="col">
-        <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:400px"></div>
+        <div id="myDiagramDiv" style="height: 400px;"></div>
       </div>
     </div>
 
@@ -236,7 +233,7 @@ para que el sistema tenga de salida 3 cotizaciones diferentes.</h4>
       }
 
      
-    window.addEventListener('DOMContentLoaded', pert);
+    // window.addEventListener('DOMContentLoaded', pert);
     </script>
 </body>
 </html>

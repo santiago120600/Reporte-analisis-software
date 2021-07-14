@@ -3,7 +3,7 @@ $(function(){
     $(document).on('click','#agregar_subcontrataciones',function(e){
         e.preventDefault();
         $("#agregar_subcontrataciones").before(
-            '<input type="text" class="form-control mb-3" id="subcontrataciones" name="subcontrataciones">'
+            '<div class="row"><div class="col-8"><div class="mb-3"><input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones"></div></div><div class="col-4"><div class="mb-3"><input type="number" class="form-control" id="costo_subcontratacion" name="costo_subcontratacion"></div></div></div>'
         );
     });
 
