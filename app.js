@@ -4,6 +4,7 @@ const port = 3000;
 const path = require('path');
 const xlsx = require('xlsx');
 const bodyParser = require('body-parser');
+var db = require('./db');
 app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -34,10 +35,8 @@ app.post('/', urlencodedParser, function (req, res) {
     const nombre_proyecto  = req.body.nombre_proyecto;   
     const problema  = req.body.problema;   
     const objetivo_gral  = req.body.objetivo_gral;   
-    const objetivos_espc  = req.body.objetivos_espc;   
     const alcance_proyecto  = req.body.alcance_proyecto;   
     const factibilidad  = req.body.factibilidad;   
-    const factibilidad_encuesta  = req.body.factibilidad_encuesta;   
     const presupuesto_cliente  = req.body.presupuesto_cliente;   
     const horas_trabajo_semanales  = req.body.horas_trabajo_semanales;   
     const tiempo_entrega  = req.body.tiempo_entrega;  
@@ -47,7 +46,6 @@ app.post('/', urlencodedParser, function (req, res) {
     const subcontrataciones  = req.body.subcontrataciones;   
     const subcontrataciones_costo  = req.body.subcontrataciones_costo;   
     const acuerdos  = req.body.acuerdos;   
-    const gantt  = req.body.gantt;   
     const observaciones_gantt  = req.body.observaciones_gantt;   
     const subsecuencias_gantt  = req.body.nombre_empresa;   
     const tabla_responsabilidades  = req.body.tabla_responsabilidades;  
@@ -56,8 +54,18 @@ app.post('/', urlencodedParser, function (req, res) {
     const fecha_inicio_actividad  = req.body.fecha_inicio_actividad;   
     const fecha_termina_actividad  = req.body.fecha_termina_actividad; 
 
-    generarChecklist(objetivos_espc);
     return res.render('index',{actividad:actividad,fecha_inicio:fecha_inicio_actividad,fecha_termina:fecha_termina_actividad});
+});
+
+
+app.get('/mysql',function(req,res){
+    var post  = {from:'me', to:'you', msg:'hi'};
+    db.query('SELECT * FROM cotizado', post, function(err, result,fields) {
+      if (err) throw err;
+      console.log(result);
+      console.log(fields);
+    });
+    res.end();
 });
 
 const generarChecklist = (lista_tareas) =>{
