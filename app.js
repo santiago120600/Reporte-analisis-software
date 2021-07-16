@@ -73,23 +73,23 @@ const insertData = (data) =>{
           if (e) { throw e; }
           // Insertar en la tabla de cotizado
           db.query(sql, [values], function(err, result) { 
-              console.log(result.insertId);  
               if (err) {
                   throw err;
+              }else{
+                // insertar en acuerdos   
+                for(i = 0; i < acuerdos.length; i++){
+                    var value = [
+                        [acuerdos[i],result.insertId]
+                    ];
+                    db.query(sqlAcuerdos,[value],function(err,result){
+                        if (err) {
+                              throw err;
+                          }
+                    });
+                } 
               }
             });
-  
-          // insertar en acuerdos   
-          for(i = 0; i < acuerdos.length; i++){
-              var value = [
-                  [acuerdos[i],1]
-              ];
-              db.query(sqlAcuerdos,[value],function(err,result){
-                  if (err) {
-                        throw err;
-                    }
-              });
-          } 
+
   
           db.commit(function(err) {
               if (err) {
