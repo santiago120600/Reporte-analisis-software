@@ -12,6 +12,20 @@ $(function(){
         $('#table_actividades tr:last').after('<tr><td><input type="text" name="actividad"></td><td><input type="date" name="fecha_inicio_actividad"></td><td><input type="date" name="fecha_termina_actividad"></td></tr>');
     });
 
+    $(document).on('click','#agregar_responsabilidad',function(e){
+        e.preventDefault();
+        $("#agregar_responsabilidad").before(
+          '<input  class="form-control mb-3" id="responsabilidades" name="responsabilidades">'
+      );
+    });
+
+    $(document).on('click','#agregar_acuerdo',function(e){
+        e.preventDefault();
+        $("#agregar_acuerdo").before(
+          '<input  class="form-control mb-3" id="acuerdos" name="acuerdos">'
+      );
+    });
+
 });
 
  function pert() {

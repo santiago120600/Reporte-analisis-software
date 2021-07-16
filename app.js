@@ -5,6 +5,7 @@ const path = require('path');
 const xlsx = require('xlsx');
 const bodyParser = require('body-parser');
 var db = require('./db');
+const { Console } = require('console');
 app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -26,7 +27,7 @@ app.listen(port, () => {
 });
 
 app.post('/', urlencodedParser, function (req, res) {
-    console.info(req.body);
+    // console.info(req.body);
     const nombre_cliente = req.body.nombre_cliente;
     const nombre_empresa  = req.body.nombre_empresa;   
     const email  = req.body.email;   
@@ -54,9 +55,9 @@ app.post('/', urlencodedParser, function (req, res) {
     const fecha_inicio_actividad  = req.body.fecha_inicio_actividad;   
     const fecha_termina_actividad  = req.body.fecha_termina_actividad; 
 
-    // insertData(req.body);
+    insertData(req.body);
 
-    return res.render('index',{actividad:actividad,fecha_inicio:fecha_inicio_actividad,fecha_termina:fecha_termina_actividad});
+    return res.render('gantt',{actividad:actividad,fecha_inicio:fecha_inicio_actividad,fecha_termina:fecha_termina_actividad});
 });
 
 const insertData = (data) =>{
@@ -64,21 +65,44 @@ const insertData = (data) =>{
     var values = [
         [data.nombre_cliente, data.nombre_empresa, data.email, data.tel,data.direcccion,data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.horas_trabajo_semanales,data.tiempo_entrega,data.costo_hora,data.costo_con_impuestos,data.costo_venta,data.observaciones_gantt]
       ];
-    db.query(sql, [values], function(err, result) {
-        if (err) throw err;
-        console.log("Number of records inserted: " + result.affectedRows);
+
+    var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
+    var acuerdos = data.acuerdos;
+    try{
+      db.beginTransaction(function(e){
+          if (e) { throw e; }
+          // Insertar en la tabla de cotizado
+          db.query(sql, [values], function(err, result) { 
+              console.log(result.insertId);  
+              if (err) {
+                  throw err;
+              }
+            });
+  
+          // insertar en acuerdos   
+          for(i = 0; i < acuerdos.length; i++){
+              var value = [
+                  [acuerdos[i],1]
+              ];
+              db.query(sqlAcuerdos,[value],function(err,result){
+                  if (err) {
+                        throw err;
+                    }
+              });
+          } 
+  
+          db.commit(function(err) {
+              if (err) {
+                  throw err;
+              }
+              console.log('success!');
+            });
       });
+    }catch(e){
+      console.log(e);
+      db.rollback();
+    }
 }
-
-
-app.get('/mysql',function(req,res){
-    db.query('SELECT * FROM cotizado', function(err, result,fields) {
-      if (err) throw err;
-      console.log(result);
-      console.log(fields);
-    });
-    res.end();
-});
 
 const generarChecklist = (lista_tareas) =>{
     const workBook = xlsx.utils.book_new();
