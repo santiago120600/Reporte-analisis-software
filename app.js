@@ -37,7 +37,7 @@ app.post('/', urlencodedParser, [
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
         // insertData(req.body);
-        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales});
+        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales,costo_subcontratacion:req.body.costo_subcontratacion});
     }
 });
 
