@@ -10,6 +10,19 @@
     <link rel="stylesheet" type="text/css" href="js/jsgantt_v12/jsgantt.css" />
 </head>
 <body>
+  <div class="container">
+    <div class="row mt-4 mb-4">
+      <div class="col-12">
+        <h3>Diagrama Gantt</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h5>Precio por hora: $ <%=costo_hora%></h5>
+        <h5>Horas a la semana de trabajo: <%=horas_trabajo%></h5>
+      </div>
+    </div>
+  </div>
     <div class="row mb-5">
         <div class="col">
           <div style="margin-left: 60px;" class="gantt" id="GanttChartDIV"></div>
@@ -31,8 +44,11 @@
             actividad = '<%=actividad%>'.split(',');
             fecha_inicio ='<%=fecha_inicio%>'.split(',');
             fecha_termina = '<%=fecha_termina%>'.split(',');
+            costo_hora= '<%=costo_hora%>';
+            horas_trabajo = '<%=horas_trabajo%>';
             for (i = 0; i < actividad.length; i++) {
-            g.AddTaskItem(new JSGantt.TaskItem(i,actividad[i],changeDateFormat(fecha_inicio[i]),changeDateFormat(fecha_termina[i]),'ff6666','','','$100'));
+              var costo =calculoCostoFase(getNumberDays(fecha_inicio[i],fecha_termina[i]),horas_trabajo,costo_hora);
+              g.AddTaskItem(new JSGantt.TaskItem(i,actividad[i],changeDateFormat(fecha_inicio[i]),changeDateFormat(fecha_termina[i]),'ff6666','','',`$ ${costo}`));
             }
             // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
             g.Draw();	
@@ -48,6 +64,16 @@
             var month = splitDate[1];
             var day = splitDate[2]; 
             return month + '/' + day + '/' + year;
+        }
+
+        function getNumberDays(fromDate,toDate){
+          const diffInMs   = new Date(toDate) - new Date(fromDate)
+          const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+          return diffInDays + 1;
+        }
+
+        function calculoCostoFase(dias,horas_diarias,costo_hora){
+          return dias *horas_diarias * costo_hora;
         }
       </script>
 </body>

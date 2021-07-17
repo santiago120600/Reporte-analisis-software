@@ -4,8 +4,8 @@ const port = 3000;
 const path = require('path');
 const xlsx = require('xlsx');
 const bodyParser = require('body-parser');
+const { check, validationResult } = require('express-validator');
 var db = require('./db');
-const { Console } = require('console');
 app.set('view engine', 'ejs');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -19,16 +19,26 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-    res.render('index',{actividad:'',fecha_inicio:'',fecha_termina:''});
+    res.render('index');
 });
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
 });
 
-app.post('/', urlencodedParser, function (req, res) {
-    insertData(req.body);
-    return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad});
+app.post('/', urlencodedParser, [ 
+    check('nombre_cliente','Ingrese un nombre de cliente').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
+    check('nombre_empresa','Ingrese un nombre de empresa').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
+    check('email','Ingrese un email valido').exists().isEmail().isLength({max:80}).withMessage('Máximo 80 carácteres'),
+], (req, res) =>{
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        console.log(errors.array());
+        res.render('index',{validaciones:errors.array(),valores:req.body});
+    }else{
+        // insertData(req.body);
+        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales});
+    }
 });
 
 const insertData = (data) =>{
