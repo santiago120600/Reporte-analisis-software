@@ -15,7 +15,7 @@ $(function(){
     $(document).on('click','#agregar_responsabilidad',function(e){
         e.preventDefault();
         $("#agregar_responsabilidad").before(
-          '<input  class="form-control mb-3" id="responsabilidades" name="responsabilidades">'
+          '<div class="row"><div class="col-8"><div class="mb-3"><input  class="form-control" id="responsabilidades" name="responsabilidades"></div></div><div class="col-4"><div class="mb-3"><select name="responsabilidad_tipo" id="responsabilidad_tipo" class="form-select"><option value="cliente">Cliente</option><option value="desarrollador">Desarrollador</option></select></div></div></div>'
       );
     });
 

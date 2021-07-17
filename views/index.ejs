@@ -150,11 +150,27 @@
                     <textarea  class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt"></textarea>
                   </div>
                    <!-- Input-->  
-                   <div class="mb-3">
-                    <label for="responsabilidades" class="form-label">Responsabilidades</label>
-                    <input  class="form-control" id="responsabilidades" name="responsabilidades">
+                   <div class="row">
+                    <div class="col-8">
+                      <!-- Input-->  
+                       <div class="mb-3">
+                        <label for="responsabilidades" class="form-label">Responsabilidades</label>
+                        <input  class="form-control" id="responsabilidades" name="responsabilidades">
+                       </div>
+                    </div>
+                    <div class="col-4">
+                      <!-- Input-->  
+                      <div class="mb-3">
+                        <label for="responsabilidad_tipo" class="form-label">Responsable</label>
+                        <select name="responsabilidad_tipo" id="responsabilidad_tipo" class="form-select">
+                          <option value="cliente">Cliente</option>
+                          <option value="desarrollador">Desarrollador</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <button class="btn btn-success" id="agregar_responsabilidad"><i class="fa fa-plus"></i></button>
+
                   <div class="row mt-3">
                     <button type="submit" class="btn btn-primary">Enviar</button>
                   </div>
