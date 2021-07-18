@@ -37,7 +37,7 @@ app.post('/', urlencodedParser, [
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
         // insertData(req.body);
-        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales,costo_subcontratacion:req.body.costo_subcontratacion, acuerdos:req.body.acuerdos, responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo)});
+        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales, acuerdos:new Array(req.body.acuerdos), responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo),subcontrataciones:getSubcontrataciones(req.body.subcontrataciones,req.body.costo_subcontratacion),gantt:getGantt(req.body.actividad,req.body.fecha_inicio_actividad,req.body.fecha_termina_actividad)});
     }
 });
 
@@ -135,6 +135,10 @@ const getGantt = (lista_actividades,lista_fecha_inicio,lista_fecha_termina) =>{
 }
 
 const getSubcontrataciones = (lista_nombres,lista_costos)=>{
+  if(Array.isArray(lista_nombres)==false && Array.isArray(lista_costos)==false){
+      lista_nombres = new Array(lista_nombres);
+      lista_costos = new Array(lista_costos);
+  }  
   const lista = [];
   for (i = 0; i < lista_nombres.length; i++) {
     lista.push([lista_nombres[i],lista_costos[i]]);
