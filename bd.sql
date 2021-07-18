@@ -26,6 +26,7 @@ CREATE TABLE cotizado(
     precio_venta DOUBLE,
     precios_impuestos DOUBLE
 );
+INSERT INTO cotizado VALUES(null,'juan carlos villagran','juan inc','juan@gmail.com',768768,'calle rosales #55','proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,8,200,null,null,'Observacion gantt',null,null,null,null);
 
 CREATE  TABLE acuerdos(
     id_acuerdos INT PRIMARY KEY AUTO_INCREMENT,
@@ -33,6 +34,7 @@ CREATE  TABLE acuerdos(
     id_cotizado INT NOT NULL,
     FOREIGN KEY(id_cotizado) REFERENCES cotizado(id_cotizado)
 );
+INSERT INTO acuerdos VALUES(null,'No cambios durante la entrega',1);
 
 CREATE TABLE gantt(
     id_gantt INT PRIMARY KEY AUTO_INCREMENT,
@@ -42,6 +44,7 @@ CREATE TABLE gantt(
     id_cotizado INT NOT NULL,
     FOREIGN KEY(id_cotizado) REFERENCES cotizado(id_cotizado)
 ); 
+INSERT INTO gantt VALUES(null,'actividad 1','2021-06-07','2021-06-11',1);
 
 CREATE TABLE subcontrataciones(
     id_subcontrataciones INT PRIMARY KEY AUTO_INCREMENT,
@@ -50,6 +53,7 @@ CREATE TABLE subcontrataciones(
     id_cotizado INT NOT NULL,
     FOREIGN KEY(id_cotizado) REFERENCES cotizado(id_cotizado)
 );
+INSERT INTO subcontrataciones VALUES(null,'mario vargaz',1000,1);
 
 CREATE TABLE responsabilidades(
     id_responsabilidad INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,3 +62,5 @@ CREATE TABLE responsabilidades(
     id_cotizado INT NOT NULL,
     FOREIGN KEY(id_cotizado) REFERENCES cotizado(id_cotizado)
 );
+INSERT INTO responsabilidades VALUES(null,'Entregar a tiempo','desarrollador',1);
+

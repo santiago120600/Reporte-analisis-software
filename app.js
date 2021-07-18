@@ -17,16 +17,34 @@ app.use((req, res, next) => {
     next();
 });
 
-
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
 });
 
-app.post('/', urlencodedParser, [ 
+app.get('/', (req, res) => {
+    db.query('SELECT id_cotizado, nombre_proyecto FROM cotizado', (error,results)=>{
+        if (error) {
+            return res.render('selection',{error:error.message});
+          }
+        res.render('selection',{data:results});
+    });
+});
+
+app.post('/', urlencodedParser,(req, res) =>{
+    var sql = 'SELECT * FROM cotizado WHERE id_cotizado = ?';
+    db.query(sql,[req.body.project], (error,results)=>{
+        if (error) {
+            return res.render('selection',{error:error.message});
+          }
+        res.render('tablas',{data:results[0]});
+    });
+});
+
+app.get('/formulario', (req, res) => {
+    res.render('index');
+});
+
+app.post('/formulario', urlencodedParser, [ 
     check('nombre_cliente','Ingrese un nombre de cliente').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
     check('nombre_empresa','Ingrese un nombre de empresa').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
     check('email','Ingrese un email valido').exists().isEmail().isLength({max:80}).withMessage('Máximo 80 carácteres'),
@@ -36,7 +54,7 @@ app.post('/', urlencodedParser, [
         console.log(errors.array());
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
-        // insertData(req.body);
+         insertData(req.body);
         return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales, acuerdos:new Array(req.body.acuerdos), responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo),subcontrataciones:getSubcontrataciones(req.body.subcontrataciones,req.body.costo_subcontratacion),gantt:getGantt(req.body.actividad,req.body.fecha_inicio_actividad,req.body.fecha_termina_actividad)});
     }
 });

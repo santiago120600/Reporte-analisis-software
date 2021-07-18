@@ -9,7 +9,7 @@ $(function(){
 
     $(document).on('click','#agregar_actividad',function(e){
         e.preventDefault();
-        $('#table_actividades tr:last').after('<tr><td><input type="text" name="actividad"></td><td><input type="date" name="fecha_inicio_actividad"></td><td><input type="date" name="fecha_termina_actividad"></td></tr>');
+        $('#table_actividades tr:last').after('<tr><td><input type="text" style="border: 0px solid;" name="actividad"></td><td><input type="date" style="border: 0px solid;" name="fecha_inicio_actividad"></td><td><input type="date" style="border: 0px solid;" name="fecha_termina_actividad"></td></tr>');
     });
 
     $(document).on('click','#agregar_responsabilidad',function(e){
