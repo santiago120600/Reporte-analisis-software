@@ -127,6 +127,11 @@ const insertData = (data) =>{
 
 const getGantt = (lista_actividades,lista_fecha_inicio,lista_fecha_termina) =>{
   // retornar una lista de listas [["actividad","2020-06-12","2020-06-12"],["actividad","2020-06-12","2020-06-12"]]
+  if(Array.isArray(lista_actividades)==false && Array.isArray(lista_fecha_inicio)==false && Array.isArray(lista_fecha_termina)==false){
+      lista_actividades = new Array(lista_actividades);
+      lista_fecha_inicio = new Array(lista_fecha_inicio);
+      lista_fecha_termina = new Array(lista_fecha_termina);
+  }  
   const lista = [];
   for (i = 0; i < lista_actividades.length; i++) {
     lista.push([lista_actividades[i],lista_fecha_inicio[i],lista_fecha_termina[i]]);
