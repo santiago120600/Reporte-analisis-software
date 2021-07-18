@@ -10,19 +10,33 @@
     <link rel="stylesheet" type="text/css" href="js/jsgantt_v12/jsgantt.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="row mt-4 mb-4">
-      <div class="col-12">
-        <h3>Diagrama Gantt</h3>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <h5>Precio por hora: $ <%=costo_hora%></h5>
-        <h5>Horas a la semana de trabajo: <%=horas_trabajo%></h5>
-      </div>
-    </div>
+    <div class="container">
+        <div class="row mt-5">
+          <div class="col-6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Precio por hora</th>
+                  <th scope="col">Horas a la semana de trabajo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td>$ <%=costo_hora%></td>
+                  <td><%=horas_trabajo%></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
   </div>
+    </div>
+  <div class="container">
+    <div class="row mt-4">
+      <div class="col-12">
+        <h4 class="ms-5">Diagrama Gantt</h4>
+      </div>
+    </div>
     <div class="row mb-5">
         <div class="col">
           <div style="margin-left: 60px;" class="gantt" id="GanttChartDIV"></div>
@@ -33,10 +47,10 @@
         <div id="myDiagramDiv" style="height: 400px;"></div>
       </div>
     </div>
-      <div class="container mt-4">
+      <div class="container">
           <div class="row">
               <div class="col-6">
-              <h3>Tabla de acuerdos</h3>
+              <h4>Tabla de acuerdos</h4>
                 <table class="table">
                   <thead>
                     <tr>
@@ -55,7 +69,7 @@
                 </table>
               </div>
               <div class="col-6">
-              <h3>Tabla de responsabilidades</h3>
+              <h4>Tabla de responsabilidades</h4>
                 <table class="table">
                   <thead>
                     <tr>
@@ -79,7 +93,7 @@
              <div class="row mt-5">
               <% if( typeof subcontrataciones != 'undefined' || subcontrataciones !='' ){ %>
                   <div class="col-6">
-                  <h3>Tabla de subcontrataciones</h3>
+                  <h4>Tabla de subcontrataciones</h4>
                     <table class="table">
                       <thead>
                         <tr>
@@ -93,15 +107,26 @@
                                <tr>
                                    <th scope="col"><%= index+1 %></th>
                                    <td><%= value[0] %></td>
-                                   <td><%= value[1] %></td>
+                                   <td>$ <%= value[1] %></td>
                                </tr>
                           <% }); %>
+                          <%  
+                            let sum = 0;
+                            for (let i = 0; i < subcontrataciones.length; i++) {
+                              sum += parseInt(subcontrataciones[i][1]);
+                            }
+                        %>
+                           <tr>
+                               <th scope="col"></th>
+                               <td>Costo total</td>
+                               <td>$ <%=sum%></td>
+                           </tr>
                       </tbody>
                     </table>
                   </div>
               <% } %>
               <div class="col-6">
-              <h3>Tabla de sub-secuencias GANTT</h3>
+              <h4>Tabla de sub-secuencias GANTT</h4>
                 <table class="table">
                   <thead>
                     <tr>
