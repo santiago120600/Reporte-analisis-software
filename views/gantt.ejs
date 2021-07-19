@@ -14,7 +14,7 @@
     <button class="btn btn-primary mt-3"><i class="fa fa-arrow-left"></i> <a style="text-decoration:none;color:white;" href="/">Menú</a></button>
         <div class="row mt-5">
           <div class="col-6">
-            <table class="table">
+            <table class="table table-bordered table-striped">
               <thead>
                 <tr>
                   <th scope="col">Precio por hora</th>
@@ -35,7 +35,7 @@
   <div class="container">
     <div class="row mt-4">
       <div class="col-12">
-        <h4 class="ms-5">Diagrama Gantt</h4>
+        <h4 class="fw-light" class="ms-5">Diagrama Gantt</h4>
       </div>
     </div>
     <div class="row mb-5">
@@ -45,14 +45,14 @@
       </div>
     <div class="row mb-5 mt-5">
       <div class="col">
-        <div id="myDiagramDiv" style="height: 400px;"></div>
+        <div id="myDiagramDiv" class="border" style="height: 400px;"></div>
       </div>
     </div>
       <div class="container">
           <div class="row">
               <div class="col-6">
-              <h4>Tabla de acuerdos</h4>
-                <table class="table">
+              <h4 class="fw-light">Tabla de acuerdos</h4>
+                <table class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -70,8 +70,8 @@
                 </table>
               </div>
               <div class="col-6">
-              <h4>Tabla de responsabilidades</h4>
-                <table class="table">
+              <h4 class="fw-light">Tabla de responsabilidades</h4>
+                <table class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -92,10 +92,10 @@
               </div>
           </div>
              <div class="row mt-5">
-              <% if( typeof subcontrataciones != 'undefined' || subcontrataciones !='' ){ %>
+              <% if( subcontrataciones != 'undefined' || subcontrataciones.length != 0 ){ %>
                   <div class="col-6">
-                  <h4>Tabla de subcontrataciones</h4>
-                    <table class="table">
+                  <h4 class="fw-light">Tabla de subcontrataciones</h4>
+                    <table class="table table-bordered table-striped">
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -127,8 +127,8 @@
                   </div>
               <% } %>
               <div class="col-6">
-              <h4>Tabla de sub-secuencias GANTT</h4>
-                <table class="table">
+              <h4 class="fw-light">Tabla de sub-secuencias GANTT</h4>
+                <table class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
