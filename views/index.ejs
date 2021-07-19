@@ -17,52 +17,52 @@
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="nombre_cliente" class="form-label">Nombre cliente</label>
-                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente">
+                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="nombre_empresa" class="form-label">Nombre de la empresa</label>
-                    <input type="text" class="form-control" id="nombre_empresa" name="nombre_empresa">
+                    <input type="text" class="form-control" id="nombre_empresa" name="nombre_empresa" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email">
+                    <input type="email" class="form-control" id="email" name="email" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="tel" class="form-label">Tel&eacute;fono</label>
-                    <input type="number" class="form-control" id="tel" name="tel">
+                    <input type="number" class="form-control" id="tel" name="tel" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="direcccion" class="form-label">Direcci&oacute;n</label>
-                    <input type="text" class="form-control" id="direcccion" name="direcccion">
+                    <input type="text" class="form-control" id="direcccion" name="direcccion" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="nombre_proyecto" class="form-label">Nombre del proyecto</label>
-                    <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto">
+                    <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="problema" class="form-label">Plantear problema/necesidad</label>
-                    <textarea  class="form-control" id="problema" rows="3" name="problema"></textarea>
+                    <textarea  class="form-control" id="problema" rows="3" name="problema" required></textarea>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="objetivo_gral" class="form-label">Objetivo general del proyecto</label>
-                    <textarea  class="form-control" id="objetivo_gral"  name="objetivo_gral"></textarea>
+                    <textarea  class="form-control" id="objetivo_gral"  name="objetivo_gral" required></textarea>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="alcance_proyecto" class="form-label">Alcance del proyecto</label>
-                    <textarea  class="form-control" id="alcance_proyecto" rows="3" name="alcance_proyecto"></textarea>
+                    <textarea  class="form-control" id="alcance_proyecto" rows="3" name="alcance_proyecto" required></textarea>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="factibilidad" class="form-label">Factibilidad (infraestructura del cliente)</label>
-                    <textarea  class="form-control" id="factibilidad" rows="3" name="factibilidad"></textarea>
+                    <textarea  class="form-control" id="factibilidad" rows="3" name="factibilidad" required></textarea>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
@@ -72,27 +72,27 @@
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="horas_trabajo_semanales" class="form-label">Horas de trabajo diarias</label>
-                    <input type="number" class="form-control" id="horas_trabajo_semanales" name="horas_trabajo_semanales">
+                    <input type="number" class="form-control" id="horas_trabajo_semanales" name="horas_trabajo_semanales" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="tiempo_entrega" class="form-label">Tiempo de entrega al cliente semanas</label>
-                    <input type="number" class="form-control" id="tiempo_entrega" name="tiempo_entrega">
+                    <input type="number" class="form-control" id="tiempo_entrega" name="tiempo_entrega" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="costo_hora" class="form-label">Costo por hora</label>
-                    <input type="number" class="form-control" id="costo_hora" name="costo_hora">
+                    <input type="number" class="form-control" id="costo_hora" name="costo_hora" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="costo_con_impuestos" class="form-label">Costo con impuestos</label>
-                    <input type="number" class="form-control" id="costo_con_impuestos" name="costo_con_impuestos">
+                    <input type="number" class="form-control" id="costo_con_impuestos" name="costo_con_impuestos" required>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="costo_venta" class="form-label">Costo de venta</label>
-                    <input type="number" class="form-control" id="costo_venta" name="costo_venta">
+                    <input type="number" class="form-control" id="costo_venta" name="costo_venta" required>
                   </div>
                   <div class="row">
                     <div class="col-8">
@@ -115,7 +115,7 @@
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="acuerdos" class="form-label">Acuerdos con cliente</label>
-                    <input  class="form-control" id="acuerdos" name="acuerdos">
+                    <input  class="form-control" id="acuerdos" name="acuerdos" required>
                   </div>
                   <button class="btn btn-success" id="agregar_acuerdo"><i class="fa fa-plus"></i></button>
                  <!-- Input-->  
@@ -132,13 +132,13 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type="text" style="border: 0px solid;" name="actividad">
+                                    <input type="text" style="border: 0px solid;" name="actividad" required>
                                 </td>
                                 <td>
-                                    <input type="date" style="border: 0px solid;" name="fecha_inicio_actividad">
+                                    <input type="date" style="border: 0px solid;" name="fecha_inicio_actividad" required>
                                 </td>
                                 <td>
-                                    <input type="date" style="border: 0px solid;" name="fecha_termina_actividad">
+                                    <input type="date" style="border: 0px solid;" name="fecha_termina_actividad" required>
                                 </td>
                             </tr>
                         </tbody>
@@ -148,7 +148,7 @@
                  <!-- Input-->  
                   <div class="mb-3">
                     <label for="observaciones_gantt" class="form-label">Observaciones del cliente sobre GANTT</label>
-                    <textarea  class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt"></textarea>
+                    <textarea  class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt" required></textarea>
                   </div>
                    <!-- Input-->  
                    <div class="row">
@@ -156,7 +156,7 @@
                       <!-- Input-->  
                        <div class="mb-3">
                         <label for="responsabilidades" class="form-label">Responsabilidades</label>
-                        <input  class="form-control" id="responsabilidades" name="responsabilidades">
+                        <input  class="form-control" id="responsabilidades" name="responsabilidades" required>
                        </div>
                     </div>
                     <div class="col-4">

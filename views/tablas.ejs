@@ -12,17 +12,25 @@
 <body>
 <div class="container">
     <button class="btn btn-primary mt-3"><i class="fa fa-arrow-left"></i> <a style="text-decoration:none;color:white;" href="/">Regresar</a></button>
-    <div class="row mt-5">
-        <div class="col-6">
+    <div class="row mt-5 mb-3">
+        <div class="col-12">
             <table class="table">
                 <thead>
                     <tr>
+                        <th scope="col">Nombre proyecto</th>
+                        <th scope="col">Nombre cliente</th>
+                        <th scope="col">Nombre empresa</th>
+                        <th scope="col">Email cliente</th>
                         <th scope="col">Precio por hora</th>
                         <th scope="col">Horas a la semana de trabajo</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td><%=cotizado['nombre_proyecto']%></td>
+                        <td><%=cotizado['nombre_cliente']%></td>
+                        <td><%=cotizado['nombre_empresa']%></td>
+                        <td><%=cotizado['email']%></td>
                         <td>$ <%=cotizado['costo_hora']%></td>
                         <td><%=cotizado['horas_trabajo_semanales']%></td>
                     </tr>

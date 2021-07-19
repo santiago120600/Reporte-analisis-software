@@ -58,7 +58,7 @@ app.post('/', urlencodedParser,(req, res) =>{
                         if (error) {
                             return res.render('selection',{error:error.message});
                           }
-                        console.log(gantt);
+                        console.log(acuerdos);
                         res.render('tablas',{cotizado:cotizado,acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades});
                     });
                 });
@@ -81,7 +81,8 @@ app.post('/formulario', urlencodedParser, [
         console.log(errors.array());
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
-         //insertData(req.body);
+        console.log(req.body);
+         insertData(req.body)
         return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales, acuerdos:new Array(req.body.acuerdos), responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo),subcontrataciones:getSubcontrataciones(req.body.subcontrataciones,req.body.costo_subcontratacion),gantt:getGantt(req.body.actividad,req.body.fecha_inicio_actividad,req.body.fecha_termina_actividad)});
     }
 });
@@ -93,7 +94,7 @@ const insertData = (data) =>{
       ];
 
     var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
-    var acuerdos = data.acuerdos;
+    var acuerdos =  data.acuerdos;
     var sqlGantt = "INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,id_cotizado) VALUES ?";
     var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad);
     var sqlSubcontrataciones = "INSERT INTO subcontrataciones(nombre,costo,id_cotizado) VALUES ?";
@@ -110,6 +111,9 @@ const insertData = (data) =>{
                   throw err;
               }else{
                 // insertar en acuerdos   
+                if(Array.isArray(acuerdos)==false){
+                  acuerdos = new Array(acuerdos);
+                }  
                 for(i = 0; i < acuerdos.length; i++){
                     var value = [
                         [acuerdos[i],result.insertId]
@@ -131,17 +135,20 @@ const insertData = (data) =>{
                           }
                     });
                 } 
+
                 // insertar en subcontrataciones 
-                for(i = 0; i < subcontrataciones.length; i++){
-                    var value = [
-                        [subcontrataciones[i][0],subcontrataciones[i][1],result.insertId]
-                    ];
-                    db.query(sqlSubcontrataciones,[value],function(err,result){
-                        if (err) {
-                              throw err;
-                          }
-                    });
-                } 
+                if(data.subcontrataciones!=''){
+                    for(i = 0; i < subcontrataciones.length; i++){
+                        var value = [
+                            [subcontrataciones[i][0],subcontrataciones[i][1],result.insertId]
+                        ];
+                        db.query(sqlSubcontrataciones,[value],function(err,result){
+                            if (err) {
+                                  throw err;
+                              }
+                        });
+                    } 
+                }
                 // insertar en responsabilidades 
                 for(i = 0; i < responsabilidades.length; i++){
                     var value = [
