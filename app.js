@@ -31,12 +31,39 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', urlencodedParser,(req, res) =>{
+    var id_proyecto =req.body.project;
     var sql = 'SELECT * FROM cotizado WHERE id_cotizado = ?';
-    db.query(sql,[req.body.project], (error,results)=>{
+    db.query(sql,[id_proyecto], (error,results)=>{
+        var cotizado = results[0];
         if (error) {
             return res.render('selection',{error:error.message});
           }
-        res.render('tablas',{data:results[0]});
+        db.query('SELECT * FROM acuerdos WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+        var acuerdos = results;
+            if (error) {
+                return res.render('selection',{error:error.message});
+              }
+            db.query('SELECT * FROM gantt WHERE id_cotizado = ? ORDER BY fecha_inicio_actividad',[id_proyecto],(error,results)=>{
+            var gantt = results;
+                if (error) {
+                    return res.render('selection',{error:error.message});
+                  }
+                db.query('SELECT * FROM subcontrataciones WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+                var subcontrataciones = results;
+                    if (error) {
+                        return res.render('selection',{error:error.message});
+                      }
+                    db.query('SELECT * FROM responsabilidades WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+                    var responsabilidades = results;
+                        if (error) {
+                            return res.render('selection',{error:error.message});
+                          }
+                        console.log(gantt);
+                        res.render('tablas',{cotizado:cotizado,acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades});
+                    });
+                });
+            });
+        });
     });
 });
 
@@ -54,7 +81,7 @@ app.post('/formulario', urlencodedParser, [
         console.log(errors.array());
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
-         insertData(req.body);
+         //insertData(req.body);
         return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales, acuerdos:new Array(req.body.acuerdos), responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo),subcontrataciones:getSubcontrataciones(req.body.subcontrataciones,req.body.costo_subcontratacion),gantt:getGantt(req.body.actividad,req.body.fecha_inicio_actividad,req.body.fecha_termina_actividad)});
     }
 });
