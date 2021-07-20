@@ -21,6 +21,75 @@ app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
 });
 
+app.get('/general', (req, res) => {
+    var id_proyecto =req.query.id_cotizacion;
+    var sql = 'SELECT * FROM cotizado WHERE id_cotizado = ?';
+    db.query(sql,[id_proyecto], (error,results)=>{
+        var cotizado = results[0];
+        if (error) {
+            return res.render('selection',{error:error.message});
+          }
+        db.query('SELECT * FROM acuerdos WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+        var acuerdos = results;
+            if (error) {
+                return res.render('selection',{error:error.message});
+              }
+            db.query('SELECT * FROM gantt WHERE id_cotizado = ? ORDER BY fecha_inicio_actividad',[id_proyecto],(error,results)=>{
+            var gantt = results;
+                if (error) {
+                    return res.render('selection',{error:error.message});
+                  }
+                db.query('SELECT * FROM subcontrataciones WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+                var subcontrataciones = results;
+                    if (error) {
+                        return res.render('selection',{error:error.message});
+                      }
+                    db.query('SELECT * FROM responsabilidades WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
+                    var responsabilidades = results;
+                        if (error) {
+                            return res.render('selection',{error:error.message});
+                          }
+                        return res.render('tablas',{cotizado:cotizado,acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades});
+                    });
+                });
+            });
+        });
+    });
+});
+
+app.get('/costos', (req, res) => {
+    db.query("SELECT * FROM costos", function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+      res.end();
+});
+
+app.post('/savecliente', urlencodedParser,(req, res)=>{
+    var values = [
+        [req.body.nombre_cliente,req.body.nombre_empresa,req.body.email,req.body.tel,req.body.direccion]
+    ];
+    db.query('INSERT INTO cliente (nombre_cliente,nombre_empresa,email,tel,direccion) VALUES ?',[values], (error,results)=>{
+        if (error) {
+            return res.end(JSON.stringify({ status: 'error',message:error }));
+          }
+          console.log("Number of records inserted: " + results.affectedRows);
+          return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    });
+});
+
+app.get('/clientesform', (req, res) => {
+    return res.render('clientes_form');
+});
+
+app.get('/gantt', (req, res) => {
+    db.query(`SELECT * FROM gantt WHERE id_cotizado = ${req.query.id_cotizacion}`, function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+      res.end();
+});
+
 app.get('/', (req, res) => {
     db.query('SELECT id_cotizado, nombre_proyecto FROM cotizado', (error,results)=>{
         if (error) {
@@ -220,4 +289,11 @@ const generarChecklist = (lista_tareas) =>{
     xlsx.writeFile(workBook,path.resolve('./outputFiles/excelFile.xlsx'));
 }
 
+const deleteItem = (table,where) =>{
+    var sql = `DELETE FROM ${table} WHERE ?`;
+    con.query(sql, [where],function (err, result) {
+      if (err) throw err;
+      console.log("Number of records deleted: " + result.affectedRows);
+    });
+}
 

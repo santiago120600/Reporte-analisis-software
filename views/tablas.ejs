@@ -10,6 +10,29 @@
     <link rel="stylesheet" type="text/css" href="js/jsgantt_v12/jsgantt.css" />
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-capitalize" href="/"><%=cotizado['nombre_proyecto']%></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/general?id_cotizacion=<%=cotizado['id_cotizado']%>">General</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/gantt?id_cotizacion=<%=cotizado['id_cotizado']%>" >Gantt</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/costos">Costos</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar -->
 <div class="container">
     <a class="btn btn-primary mt-3" style="text-decoration:none;color:white;" href="/"><i class="fa fa-arrow-left"></i> Regresar</a>
     <div class="row mt-5 mb-3">

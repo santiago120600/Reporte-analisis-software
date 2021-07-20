@@ -2,13 +2,30 @@ DROP DATABASE IF EXISTS cotizacion;
 CREATE DATABASE IF NOT EXISTS cotizacion;
 USE cotizacion;
 
-CREATE TABLE cotizado(
-    id_cotizado INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE costos(
+    id_costos INT PRIMARY KEY AUTO_INCREMENT,
+    costo_hora DOUBLE, 
+    costo_con_impuestos DOUBLE, 
+    costo_venta DOUBLE,
+    gastos_fijos DOUBLE,
+    precios_impuestos DOUBLE
+);
+
+INSERT INTO costos VALUES(null,200,210,300,10000,200);
+
+CREATE TABLE cliente(
+    id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nombre_cliente VARCHAR(80) NOT NULL,
     nombre_empresa  VARCHAR(80) NOT NULL,
     email VARCHAR(80) NOT NULL, 
     tel INT NOT NULL, 
-    direccion VARCHAR(80), 
+    direccion VARCHAR(80) 
+);
+
+INSERT INTO cliente VALUES(null,'juan carlos villagran','juan inc','juan@gmail.com',768768,'calle rosales #55');
+
+CREATE TABLE cotizado(
+    id_cotizado INT PRIMARY KEY AUTO_INCREMENT,
     nombre_proyecto VARCHAR(80) NOT NULL UNIQUE,
     problema  VARCHAR(80),
     objetivo_gral VARCHAR(80),
@@ -17,16 +34,14 @@ CREATE TABLE cotizado(
     presupuesto_cliente DOUBLE,
     horas_trabajo_semanales INT,
     tiempo_entrega_semanas INT,
-    costo_hora DOUBLE, 
-    costo_con_impuestos DOUBLE, 
-    costo_venta DOUBLE,
     observaciones_gantt TEXT,
     costo_final  DOUBLE,
     estimacion DOUBLE,
     precio_venta DOUBLE,
-    precios_impuestos DOUBLE
+    id_cliente INT NOT NULL,
+    FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente)
 );
-INSERT INTO cotizado VALUES(null,'juan carlos villagran','juan inc','juan@gmail.com',768768,'calle rosales #55','proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,8,200,null,null,'Observacion gantt',null,null,null,null);
+INSERT INTO cotizado VALUES(null,'proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,8,'Observacion gantt',null,null,null,1);
 
 CREATE  TABLE acuerdos(
     id_acuerdos INT PRIMARY KEY AUTO_INCREMENT,
@@ -42,9 +57,11 @@ CREATE TABLE gantt(
     fecha_inicio_actividad DATE NOT NULL,
     fecha_termina_actividad DATE NOT NULL,
     id_cotizado INT NOT NULL,
+    puntos_cosmic INT,
+    costo DOUBLE,
     FOREIGN KEY(id_cotizado) REFERENCES cotizado(id_cotizado)
 ); 
-INSERT INTO gantt VALUES(null,'actividad 1','2021-06-07','2021-06-11',1);
+INSERT INTO gantt VALUES(null,'actividad 1','2021-06-07','2021-06-11',1,8,500);
 
 CREATE TABLE subcontrataciones(
     id_subcontrataciones INT PRIMARY KEY AUTO_INCREMENT,

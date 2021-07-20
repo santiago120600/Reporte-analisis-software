@@ -26,5 +26,41 @@ $(function(){
       );
     });
 
+    $(document).on('click', '#openModal', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/clientesform',
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_clientes', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/savecliente',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    $(document).find('#modalView').modal('hide');
+                    Swal.fire(
+                        'Correcto',
+                        convert_response.message,
+                        'success'
+                    );
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
 });
 
