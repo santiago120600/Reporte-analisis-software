@@ -62,5 +62,10 @@ $(function(){
         });
     });
 
+    $(document).on('click', '#project_select', function() {
+        id = $('#select_project').val();
+        $(this).attr('href',`general?id_cotizacion=${id}`);
+    });
+
 });
 

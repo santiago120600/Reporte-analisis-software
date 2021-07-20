@@ -81,3 +81,4 @@ CREATE TABLE responsabilidades(
 );
 INSERT INTO responsabilidades VALUES(null,'Entregar a tiempo','desarrollador',1);
 
+CREATE OR REPLACE VIEW cotizado_view AS SELECT c.*,cl.nombre_cliente,cl.nombre_empresa,cl.email,cl.tel,cl.direccion FROM cotizado AS c JOIN cliente AS cl ON c.id_cliente = cl.id_cliente; 

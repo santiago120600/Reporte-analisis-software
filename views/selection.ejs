@@ -22,13 +22,13 @@
             <div class="col">
                 <% if( data.length != 0 ){ %>
                     <h5>Proyecto existente</h5>
-                    <form action="/" method="POST" >
-                        <select class="form-select" name="project">
+                    <form>
+                        <select class="form-select" name="project" id="select_project">
                             <% data.forEach(function(value, index){ %>
                                 <option value="<%=value.id_cotizado%>"><%=value.nombre_proyecto%></option>
                         <% }); %>
                         </select>
-                    <button type="submit" class="btn btn-primary mt-3">Elegir</button>
+                    <a id="project_select"  class="btn btn-primary mt-3" href="#">Elegir</a>
                     </form>
                 <% } %>
             </div>

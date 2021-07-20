@@ -14,30 +14,14 @@
         <div class="row align-items-center mt-4">
             <div class="col">
                 <form method="POST" action="/formulario" id="form_main">
-                 <!-- Input-->  
+                  <!-- Input-->  
                   <div class="mb-3">
-                    <label for="nombre_cliente" class="form-label">Nombre cliente</label>
-                    <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="nombre_empresa" class="form-label">Nombre de la empresa</label>
-                    <input type="text" class="form-control" id="nombre_empresa" name="nombre_empresa" required>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="tel" class="form-label">Tel&eacute;fono</label>
-                    <input type="number" class="form-control" id="tel" name="tel" required>
-                  </div>
-                 <!-- Input-->  
-                  <div class="mb-3">
-                    <label for="direcccion" class="form-label">Direcci&oacute;n</label>
-                    <input type="text" class="form-control" id="direcccion" name="direcccion" required>
+                    <label for="id_cliente" class="form-label">Cliente</label>
+                    <select class="form-select" name="id_cliente" id="id_cliente">
+                        <% data.forEach(function(value, index){ %>
+                            <option value="<%=value.id_cliente%>"><%=value.nombre_cliente%></option>
+                        <% }); %>
+                    </select>
                   </div>
                  <!-- Input-->  
                   <div class="mb-3">

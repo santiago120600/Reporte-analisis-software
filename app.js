@@ -23,7 +23,7 @@ app.listen(port, () => {
 
 app.get('/general', (req, res) => {
     var id_proyecto =req.query.id_cotizacion;
-    var sql = 'SELECT * FROM cotizado WHERE id_cotizado = ?';
+    var sql = 'SELECT * FROM cotizado_view WHERE id_cotizado = ?';
     db.query(sql,[id_proyecto], (error,results)=>{
         var cotizado = results[0];
         if (error) {
@@ -99,67 +99,36 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/', urlencodedParser,(req, res) =>{
-    var id_proyecto =req.body.project;
-    var sql = 'SELECT * FROM cotizado WHERE id_cotizado = ?';
-    db.query(sql,[id_proyecto], (error,results)=>{
-        var cotizado = results[0];
+app.get('/formulario', (req, res) => {
+    db.query('SELECT * FROM cliente', (error,results)=>{
         if (error) {
             return res.render('selection',{error:error.message});
           }
-        db.query('SELECT * FROM acuerdos WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
-        var acuerdos = results;
-            if (error) {
-                return res.render('selection',{error:error.message});
-              }
-            db.query('SELECT * FROM gantt WHERE id_cotizado = ? ORDER BY fecha_inicio_actividad',[id_proyecto],(error,results)=>{
-            var gantt = results;
-                if (error) {
-                    return res.render('selection',{error:error.message});
-                  }
-                db.query('SELECT * FROM subcontrataciones WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
-                var subcontrataciones = results;
-                    if (error) {
-                        return res.render('selection',{error:error.message});
-                      }
-                    db.query('SELECT * FROM responsabilidades WHERE id_cotizado = ?',[id_proyecto],(error,results)=>{
-                    var responsabilidades = results;
-                        if (error) {
-                            return res.render('selection',{error:error.message});
-                          }
-                        console.log(acuerdos);
-                        res.render('tablas',{cotizado:cotizado,acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades});
-                    });
-                });
-            });
-        });
+        res.render('index',{data:results});
     });
 });
 
-app.get('/formulario', (req, res) => {
-    res.render('index');
-});
-
 app.post('/formulario', urlencodedParser, [ 
-    check('nombre_cliente','Ingrese un nombre de cliente').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
-    check('nombre_empresa','Ingrese un nombre de empresa').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
-    check('email','Ingrese un email valido').exists().isEmail().isLength({max:80}).withMessage('Máximo 80 carácteres'),
+    check('nombre_proyecto','Ingrese un nombre de proyecto').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
 ], (req, res) =>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         console.log(errors.array());
         res.render('index',{validaciones:errors.array(),valores:req.body});
     }else{
-        //console.log(req.body);
-         insertData(req.body)
-        return res.render('gantt',{actividad:req.body.actividad,fecha_inicio:req.body.fecha_inicio_actividad,fecha_termina:req.body.fecha_termina_actividad,costo_hora:req.body.costo_hora,horas_trabajo:req.body.horas_trabajo_semanales, acuerdos:new Array(req.body.acuerdos), responsabilidades:getSubcontrataciones(req.body.responsabilidades,req.body.responsabilidad_tipo),subcontrataciones:getSubcontrataciones(req.body.subcontrataciones,req.body.costo_subcontratacion),gantt:getGantt(req.body.actividad,req.body.fecha_inicio_actividad,req.body.fecha_termina_actividad)});
+         insertData(req.body);
+         db.query("SELECT id_cotizado FROM cotizado WHERE id_cotizado = (SELECT max(id_cotizado) FROM cotizado)", function (err, result) {
+            if (err) throw err;
+            id =result[0]['id_cotizado'];
+            res.redirect(`/general?id_cotizacion=${id}`);
+          });
     }
 });
 
 const insertData = (data) =>{
-    var sql = "INSERT INTO cotizado (nombre_cliente, nombre_empresa, email, tel,  direccion,nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente, horas_trabajo_semanales, tiempo_entrega_semanas, costo_hora, costo_con_impuestos, costo_venta, observaciones_gantt) VALUES ?";
+    var sql = "INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente, horas_trabajo_semanales, tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?";
     var values = [
-        [data.nombre_cliente, data.nombre_empresa, data.email, data.tel,data.direcccion,data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.horas_trabajo_semanales,data.tiempo_entrega,data.costo_hora,data.costo_con_impuestos,data.costo_venta,data.observaciones_gantt]
+        [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.horas_trabajo_semanales,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
       ];
 
     var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
