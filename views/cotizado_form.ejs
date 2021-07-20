@@ -1,0 +1,139 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Agregar Cotización</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form_cotizado">
+    <div class="modal-body">
+            <!-- Input-->  
+            <div class="mb-3">
+                <label for="id_cliente" class="form-label">Cliente</label>
+                <select class="form-select" name="id_cliente" id="id_cliente">
+                    <% data.forEach(function(value, index){ %>
+                        <option value="<%=value.id_cliente%>"><%=value.nombre_cliente%></option>
+                    <% }); %>
+                </select>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="nombre_proyecto" class="form-label">Nombre del proyecto</label>
+                <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" required>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="problema" class="form-label">Plantear problema/necesidad</label>
+                <textarea  class="form-control" id="problema" rows="3" name="problema" required></textarea>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="objetivo_gral" class="form-label">Objetivo general del proyecto</label>
+                <textarea  class="form-control" id="objetivo_gral"  name="objetivo_gral" required></textarea>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="alcance_proyecto" class="form-label">Alcance del proyecto</label>
+                <textarea  class="form-control" id="alcance_proyecto" rows="3" name="alcance_proyecto" required></textarea>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="factibilidad" class="form-label">Factibilidad (infraestructura del cliente)</label>
+                <textarea  class="form-control" id="factibilidad" rows="3" name="factibilidad" required></textarea>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="presupuesto_cliente" class="form-label">Presupuesto cliente (opcional)</label>
+                <input type="number" class="form-control" id="presupuesto_cliente" name="presupuesto_cliente">
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="horas_trabajo_semanales" class="form-label">Horas de trabajo diarias</label>
+                <input type="number" class="form-control" id="horas_trabajo_semanales" name="horas_trabajo_semanales" required>
+              </div>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="tiempo_entrega" class="form-label">Tiempo de entrega al cliente semanas</label>
+                <input type="number" class="form-control" id="tiempo_entrega" name="tiempo_entrega" required>
+              </div>
+              <div class="row">
+                <div class="col-8">
+                  <!-- Input-->  
+                   <div class="mb-3">
+                     <label for="subcontrataciones" class="form-label">Subcontrataciones (nombre)</label>
+                     <input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones">
+                   </div>
+                </div>
+                <div class="col-4">
+                  <!-- Input-->  
+                  <div class="mb-3">
+                    <label for="costo_subcontratacion" class="form-label">Costo</label>
+                    <input type="number" class="form-control" id="costo_subcontratacion" name="costo_subcontratacion">
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-success" id="agregar_subcontrataciones"><i class="fa fa-plus"></i></button>
+
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="acuerdos" class="form-label">Acuerdos con cliente</label>
+                <input  class="form-control" id="acuerdos" name="acuerdos" required>
+              </div>
+              <button class="btn btn-success" id="agregar_acuerdo"><i class="fa fa-plus"></i></button>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="gantt" class="form-label">Fases del proyecto GANTT</label>
+                <table class="table table-striped" id="table_actividades">
+                    <thead>
+                        <tr>
+                            <th scope="col">Actividad</th>
+                            <th scope="col">Inicio</th>
+                            <th scope="col">Final</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" style="border: 0px solid;" name="actividad" required>
+                            </td>
+                            <td>
+                                <input type="date" style="border: 0px solid;" name="fecha_inicio_actividad" required>
+                            </td>
+                            <td>
+                                <input type="date" style="border: 0px solid;" name="fecha_termina_actividad" required>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+              <button class="btn btn-success" id="agregar_actividad"><i class="fa fa-plus"></i></button>
+             <!-- Input-->  
+              <div class="mb-3">
+                <label for="observaciones_gantt" class="form-label">Observaciones del cliente sobre GANTT</label>
+                <textarea  class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt" required></textarea>
+              </div>
+               <!-- Input-->  
+               <div class="row">
+                <div class="col-8">
+                  <!-- Input-->  
+                   <div class="mb-3">
+                    <label for="responsabilidades" class="form-label">Responsabilidades</label>
+                    <input  class="form-control" id="responsabilidades" name="responsabilidades" required>
+                   </div>
+                </div>
+                <div class="col-4">
+                  <!-- Input-->  
+                  <div class="mb-3">
+                    <label for="responsabilidad_tipo" class="form-label">Responsable</label>
+                    <select name="responsabilidad_tipo" id="responsabilidad_tipo" class="form-select">
+                      <option value="cliente">Cliente</option>
+                      <option value="desarrollador">Desarrollador</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-success" id="agregar_responsabilidad"><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+    </div>
+</form>

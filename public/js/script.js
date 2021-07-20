@@ -62,6 +62,44 @@ $(function(){
         });
     });
 
+    $(document).on('click', '#openModalCotizado', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/cotizadoform',
+            'success': function(response) {
+                $(document).find('#modalContentCotizado').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_cotizado', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/formulario',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    $(document).find('#modalViewCotizado').modal('hide');
+                    Swal.fire(
+                        'Correcto',
+                        convert_response.message,
+                        'success'
+                    );
+                    //recargar el select de los proyectos
+                    // $(document).find('#data_container').empty().append(response);
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
     $(document).on('click', '#project_select', function() {
         id = $('#select_project').val();
         $(this).attr('href',`general?id_cotizacion=${id}`);

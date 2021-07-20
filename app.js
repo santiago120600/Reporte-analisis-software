@@ -82,6 +82,19 @@ app.get('/clientesform', (req, res) => {
     return res.render('clientes_form');
 });
 
+app.get('/cotizadoform', async (req, res) => {
+    const result = await getClientes();
+    return res.render('cotizado_form',{data:result});
+});
+
+function getClientes(){
+    return new Promise((resolve, reject)=>{
+        db.query('SELECT * FROM cliente', (error,results)=>{
+            return error ? reject(error) : resolve(results);
+        });
+    });
+}
+
 app.get('/gantt', (req, res) => {
     db.query(`SELECT * FROM gantt WHERE id_cotizado = ${req.query.id_cotizacion}`, function (err, result) {
         if (err) throw err;
@@ -114,14 +127,10 @@ app.post('/formulario', urlencodedParser, [
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         console.log(errors.array());
-        res.render('index',{validaciones:errors.array(),valores:req.body});
+        return res.end(JSON.stringify({ status: 'error',message: errors.array(),valores:req.body}));
     }else{
-         insertData(req.body);
-         db.query("SELECT id_cotizado FROM cotizado WHERE id_cotizado = (SELECT max(id_cotizado) FROM cotizado)", function (err, result) {
-            if (err) throw err;
-            id =result[0]['id_cotizado'];
-            res.redirect(`/general?id_cotizacion=${id}`);
-          });
+        insertData(req.body);
+        return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
     }
 });
 

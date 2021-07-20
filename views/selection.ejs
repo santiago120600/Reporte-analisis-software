@@ -13,7 +13,7 @@
         <div class="row justify-content-center align-content-center" style="height:100vh;">
         <div class="row">
             <div class="col">
-                <a class="btn btn-success" style="text-decoration:none;color:white;" href="/formulario"><i class="fa fa-plus"></i> Nuevo proyecto</a>
+                <button class="btn btn-success" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalViewCotizado" id="openModalCotizado"><i class="fa fa-plus"></i> Nuevo proyecto</button>
                 <button class="btn btn-info" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView" id="openModal"><i class="fa fa-plus"></i> Nuevo Cliente</button>
                 <button class="btn btn-secondary" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView"><i class="fa fa-clipboard"></i> Costos</button>
             </div>
@@ -40,6 +40,13 @@
 <div class="modal fade" id="modalView" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content" id="modalContent">
+      </div>
+    </div>
+  </div>
+        <!-- Modal Cotizaion-->
+<div class="modal fade" id="modalViewCotizado" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" id="modalContentCotizado">
       </div>
     </div>
   </div>
