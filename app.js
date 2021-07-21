@@ -57,10 +57,14 @@ app.get('/cotizadoform', async (req, res) => {
 });
 
 
-app.get('/gantt', async (req, res) => {
-      var data = await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${req.query.id_cotizacion}`);
-      console.log(data);
-    //   res.render('gantt',{data:data});
+app.get('/gantt', (req, res) => {
+    var id =req.query.id_cotizacion;
+    fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id}`).then(function(value){
+        result = fs.listToStringGantt(value);
+        return res.render('gantt',{actividades:result['actividades'],fecha_inicio:result['fecha_inicio'],fecha_termina:result['fecha_termina'],id:id,});
+    }).catch(function(e){
+        console.log(e);
+    });
 });
 
 app.get('/', async (req, res) => {

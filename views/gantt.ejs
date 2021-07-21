@@ -4,199 +4,81 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotización</title>
+    <title>Gantt</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="js/jsgantt_v12/jsgantt.css" />
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-capitalize" href="/"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/general?id_cotizacion=<%=id%>">General</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/gantt?id_cotizacion=<%=id%>" >Gantt</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/costos">Costos</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar -->
     <div class="container">
-    <a class="btn btn-primary mt-3" style="text-decoration:none;color:white;" href="/"><i class="fa fa-arrow-left"></i> Menú</a>
-        <div class="row mt-5">
-          <div class="col-6">
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Precio por hora</th>
-                  <th scope="col">Horas a la semana de trabajo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                    <td>$ <%=costo_hora%></td>
-                  <td><%=horas_trabajo%></td>
-                </tr>
-              </tbody>
-            </table>
+    <a class="btn btn-primary mt-3" style="text-decoration:none;color:white;" href="/"><i class="fa fa-arrow-left"></i> Regresar</a>
+        <div class="row mb-5 mt-5">
+            <div class="col">
+              <div class="gantt border" id="gantt"></div>
+            </div>
           </div>
-        </div>
-  </div>
-    </div>
-  <div class="container">
-    <div class="row mt-4">
-      <div class="col-12">
-        <h4 class="fw-light" class="ms-5">Diagrama Gantt</h4>
-      </div>
-    </div>
-    <div class="row mb-5">
-        <div class="col">
-          <div class="gantt border" id="GanttChartDIV"></div>
-        </div>
-      </div>
-    <div class="row mb-5 mt-5">
-      <div class="col">
-        <div id="myDiagramDiv" class="border" style="height: 400px;"></div>
-      </div>
-    </div>
-      <div class="container">
-          <div class="row">
-              <div class="col-6">
-              <h4 class="fw-light">Tabla de acuerdos</h4>
-                <table class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Acuerdos</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% acuerdos.forEach(function(value, index){ %>
-                           <tr>
-                               <th scope="col"><%= index+1 %></th>
-                               <td><%= value %></td>
-                           </tr>
-                      <% }); %>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-6">
-              <h4 class="fw-light">Tabla de responsabilidades</h4>
-                <table class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Responsabilidades</th>
-                      <th scope="col">Responsable</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% responsabilidades.forEach(function(value, index){ %>
-                           <tr>
-                               <th scope="col"><%= index+1 %></th>
-                               <td><%= value[0] %></td>
-                               <td><%= value[1] %></td>
-                           </tr>
-                      <% }); %>
-                  </tbody>
-                </table>
-              </div>
+          <div class="row mb-5 mt-5">
+            <div class="col">
+              <div id="myDiagramDiv" class="border" style="height: 400px;"></div>
+            </div>
           </div>
-             <div class="row mt-5">
-              <% if( subcontrataciones != 'undefined' || subcontrataciones.length != 0 ){ %>
-                  <div class="col-6">
-                  <h4 class="fw-light">Tabla de subcontrataciones</h4>
-                    <table class="table table-bordered table-striped">
-                      <thead>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Nombre</th>
-                          <th scope="col">Costo</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% subcontrataciones.forEach(function(value, index){ %>
-                               <tr>
-                                   <th scope="col"><%= index+1 %></th>
-                                   <td><%= value[0] %></td>
-                                   <td>$ <%= value[1] %></td>
-                               </tr>
-                          <% }); %>
-                          <%  
-                            let sum = 0;
-                            for (let i = 0; i < subcontrataciones.length; i++) {
-                              sum += parseInt(subcontrataciones[i][1]);
-                            }
-                        %>
-                           <tr>
-                               <th scope="col"></th>
-                               <td>Costo total</td>
-                               <td>$ <%=sum%></td>
-                           </tr>
-                      </tbody>
-                    </table>
-                  </div>
-              <% } %>
-              <div class="col-6">
-              <h4 class="fw-light">Tabla de sub-secuencias GANTT</h4>
-                <table class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Actividad</th>
-                      <th scope="col">Fecha Inicio</th>
-                      <th scope="col">Fecha Termina</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% gantt.forEach(function(value, index){ %>
-                           <tr>
-                               <th scope="col"><%= index+1 %></th>
-                               <td><%= value[0] %></td>
-                               <td><%= value[1] %></td>
-                               <td><%= value[2] %></td>
-                           </tr>
-                      <% }); %>
-                  </tbody>
-                </table>
-              </div>
-              </div>  
-      </div>
+    </div>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
       <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
       <script src="js/jsgantt_v12/jsgantt.js"></script>
       <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
       <script>
-        window.addEventListener('DOMContentLoaded', pert);
-        var condicion ='<%=actividad%>';
-        if(condicion){
-            var g = new JSGantt.GanttChart('g',document.getElementById('GanttChartDIV'), 'day');
-            g.setShowRes(1); // Show/Hide Responsible (0/1)
-            g.setShowComp(0); // Show/Hide % Complete(0/1)
-            g.setDateDisplayFormat('yyyy-mm-dd') // Set format to display dates ('mm/dd/yyyy', 'dd/mm/yyyy', 'yyyy-mm-dd')
-            g.setFormatArr("day") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
-            actividad = '<%=actividad%>'.split(',');
-            fecha_inicio ='<%=fecha_inicio%>'.split(',');
-            fecha_termina = '<%=fecha_termina%>'.split(',');
-            costo_hora= '<%=costo_hora%>';
-            horas_trabajo = '<%=horas_trabajo%>';
-            for (i = 0; i < actividad.length; i++) {
-              var costo =calculoCostoFase(getNumberDays(fecha_inicio[i],fecha_termina[i]),horas_trabajo,costo_hora);
-              g.AddTaskItem(new JSGantt.TaskItem(i,actividad[i],changeDateFormat(fecha_inicio[i]),changeDateFormat(fecha_termina[i]),'ff6666','','',`$ ${costo}`));
-            }
-            // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
-            g.Draw();	
-            g.DrawDependencies();
+        window.addEventListener('DOMContentLoaded', (e)=>{
+          pert();
+          showGantt();
+        });
+
+        var actividades = '<%=actividades%>'.split(",");
+        var fecha_inicio = '<%=fecha_inicio%>'.split(",");
+        var fecha_termina = '<%=fecha_termina%>'.split(",");
+
+        function showGantt(){
+          g = new JSGantt.GanttChart('g',document.getElementById('gantt'), 'day');
+          g.setShowRes(1); // Show/Hide Responsible (0/1)
+          g.setShowComp(0); // Show/Hide % Complete(0/1)
+          g.setDateDisplayFormat('yyyy-mm-dd') // Set format to display dates ('mm/dd/yyyy', 'dd/mm/yyyy', 'yyyy-mm-dd')
+          g.setFormatArr("day") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
+          for (i = 0; i < actividades.length; i++) {
+            g.AddTaskItem(new JSGantt.TaskItem(i,actividades[i],fecha_inicio[i],fecha_termina[i],'ff6666','','','$'));
+          }
+          // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
+          g.Draw();	
+          g.DrawDependencies();
         }
 
-        function changeDateFormat(inputDate) {
-            var splitDate = inputDate.split('-');
-            if(splitDate.count == 0){
-                return null;
-            }
-            var year = splitDate[0];
-            var month = splitDate[1];
-            var day = splitDate[2]; 
-            return month + '/' + day + '/' + year;
-        }
-
+     
         function getNumberDays(fromDate,toDate){
           const diffInMs   = new Date(toDate) - new Date(fromDate)
           const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
           return diffInDays + 1;
-        }
-
-        function calculoCostoFase(dias,horas_diarias,costo_hora){
-          return dias *horas_diarias * costo_hora;
         }
 
 
@@ -216,11 +98,6 @@
                     layout: $(go.LayeredDigraphLayout)
                   });
 
-              // The node template shows the activity name in the middle as well as
-              // various statistics about the activity, all surrounded by a border.
-              // The border's color is determined by the node data's ".critical" property.
-              // Some information is not available as properties on the node data,
-              // but must be computed -- we use converter functions for that.
               myDiagram.nodeTemplate =
                 $(go.Node, "Auto",
                   $(go.Shape, "Rectangle",  // the border
@@ -242,15 +119,6 @@
                   )  // end Table Panel
                 );  // end Node
 
-              // The link data object does not have direct access to both nodes
-              // (although it does have references to their keys: .from and .to).
-              // This conversion function gets the GraphObject that was data-bound as the second argument.
-              // From that we can get the containing Link, and then the Link.fromNode or .toNode,
-              // and then its node data, which has the ".critical" property we need.
-              //
-              // But note that if we were to dynamically change the ".critical" property on a node data,
-              // calling myDiagram.model.updateTargetBindings(nodedata) would only update the color
-              // of the nodes.  It would be insufficient to change the appearance of any Links.
               function linkColorConverter(linkdata, elt) {
                 var link = elt.part;
                 if (!link) return blue;
@@ -261,9 +129,6 @@
                 return pink;  // when both Link.fromNode.data.critical and Link.toNode.data.critical
               }
 
-              // The color of a link (including its arrowhead) is red only when both
-              // connected nodes have data that is ".critical"; otherwise it is blue.
-              // This is computed by the binding converter function.
               myDiagram.linkTemplate =
                 $(go.Link,
                   { toShortLength: 6, toEndSegmentLength: 20 },
@@ -277,11 +142,12 @@
 
               // here's the data defining the graph
               var nodeDataArray = [];
-              for (i = 0; i < actividad.length; i++) {
-                nodeDataArray.push({ key: i, text: actividad[i] });
+              for (i = 0; i < actividades.length; i++) {
+                nodeDataArray.push({ key: i, text: actividades[i] });
               }
               var linkDataArray = [];
-              for (i = 0; i < actividad.length; i++) {
+
+              for (i = 0; i < actividades.length; i++) {
                 linkDataArray.push({ from: i, to: i+1 });
               }
               myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
@@ -289,3 +155,4 @@
       </script>
 </body>
 </html>
+

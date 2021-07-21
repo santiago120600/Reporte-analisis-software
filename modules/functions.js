@@ -154,3 +154,25 @@ const getGantt = (lista_actividades,lista_fecha_inicio,lista_fecha_termina) =>{
     }
     return lista;
 }
+
+module.exports.listToStringGantt = function(arrayOfObjects){
+    lista_actividades = [];
+    lista_fecha_inicio = [];
+    lista_fecha_termina = [];
+    arrayOfObjects.forEach((value)=>{
+        lista_actividades.push(value['actividad']);
+        lista_fecha_inicio.push(convertDate(value['fecha_inicio_actividad']));
+        lista_fecha_termina.push(convertDate(value['fecha_termina_actividad']));
+    });
+    string_actividades =lista_actividades.toString();
+    string_fecha_inicio =lista_fecha_inicio.toString();
+    string_fecha_termina =lista_fecha_termina.toString();
+    return {'actividades':string_actividades,'fecha_inicio':string_fecha_inicio,'fecha_termina':string_fecha_termina};
+}
+
+function convertDate(date){
+    // formato 2/10/2008 dd/mm/yyyy
+    return (date.getMonth() + 1) + 
+    "/" +  date.getDate() +
+    "/" +  date.getFullYear();
+}
