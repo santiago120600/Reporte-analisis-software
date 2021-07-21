@@ -26,7 +26,7 @@ app.get('/general', async (req, res) => {
     var gantt =  await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id_proyecto} ORDER BY fecha_inicio_actividad`);
     var subcontrataciones =  await fs.queryData(`SELECT * FROM subcontrataciones WHERE id_cotizado = ${id_proyecto}`);
     var responsabilidades =  await fs.queryData(`SELECT * FROM responsabilidades WHERE id_cotizado = ${id_proyecto}`);
-    return res.render('tablas',{cotizado:cotizado,acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades});
+    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], horas_trabajo_semanales:cotizado[0]['horas_trabajo_semanales'],});
 });
 
 app.get('/costos', async (req, res) => {

@@ -12,17 +12,17 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand text-capitalize" href="/"><%=cotizado['nombre_proyecto']%></a>
+      <a class="navbar-brand text-capitalize" href="/"><%=nombre_proyecto%></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/general?id_cotizacion=<%=cotizado['id_cotizado']%>">General</a>
+            <a class="nav-link" href="/general?id_cotizacion=<%=id_cotizado%>">General</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/gantt?id_cotizacion=<%=cotizado['id_cotizado']%>" >Gantt</a>
+            <a class="nav-link" href="/gantt?id_cotizacion=<%=id_cotizado%>" >Gantt</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/costos">Costos</a>
@@ -43,18 +43,16 @@
                         <th scope="col">Nombre cliente</th>
                         <th scope="col">Nombre empresa</th>
                         <th scope="col">Email cliente</th>
-                        <th scope="col">Precio por hora</th>
                         <th scope="col">Horas a la semana de trabajo</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><%=cotizado['nombre_proyecto']%></td>
-                        <td><%=cotizado['nombre_cliente']%></td>
-                        <td><%=cotizado['nombre_empresa']%></td>
-                        <td><%=cotizado['email']%></td>
-                        <td>$ <%=cotizado['costo_hora']%></td>
-                        <td><%=cotizado['horas_trabajo_semanales']%></td>
+                        <td><%=nombre_proyecto%></td>
+                        <td><%=nombre_cliente%></td>
+                        <td><%=nombre_empresa%></td>
+                        <td><%=email%></td>
+                        <td><%=horas_trabajo_semanales%></td>
                     </tr>
                 </tbody>
             </table>
@@ -68,6 +66,7 @@
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Acuerdos</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -75,6 +74,7 @@
                        <tr>
                            <th scope="col"><%= index+1 %></th>
                            <td><%= value['acuerdo'] %></td>
+                           <td><button type="button" class="btn btn-danger" data-target="<%= value['id_acuerdos'] %>"><i class="fa fa-plus"></i></button></td>
                        </tr>
                   <% }); %>
               </tbody>
@@ -88,6 +88,7 @@
                   <th scope="col">#</th>
                   <th scope="col">Responsabilidades</th>
                   <th scope="col">Responsable</th>
+                  <th scope="col"></th>
                 </tr>
               </thead>
               <tbody>
@@ -96,6 +97,7 @@
                            <th scope="col"><%= index+1 %></th>
                            <td><%= value['responsabilidad'] %></td>
                            <td><%= value['tipo'] %></td>
+                           <td><button type="button" class="btn btn-danger" data-target="<%= value['id_responsabilidad'] %>"><i class="fa fa-plus"></i></button></td>
                        </tr>
                   <% }); %>
               </tbody>
@@ -119,6 +121,7 @@
                                    <th scope="col"><%= index+1 %></th>
                                    <td><%= value['nombre'] %></td>
                                    <td>$ <%= value['costo'] %></td>
+                                    <td><button type="button" class="btn btn-danger" data-target="<%= value['id_subcontrataciones'] %>"><i class="fa fa-plus"></i></button></td>
                                </tr>
                           <% }); %>
                           <%  
@@ -131,6 +134,7 @@
                                <th scope="col"></th>
                                <td>Costo total</td>
                                <td>$ <%=sum%></td>
+                               <td></td>
                            </tr>
                       </tbody>
                     </table>
@@ -145,6 +149,7 @@
                       <th scope="col">Actividad</th>
                       <th scope="col">Fecha Inicio</th>
                       <th scope="col">Fecha Termina</th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -154,6 +159,7 @@
                                <td><%= value['actividad'] %></td>
                                <td><%= value['fecha_inicio_actividad'] %></td>
                                <td><%= value['fecha_termina_actividad'] %></td>
+                                <td><button type="button" class="btn btn-danger" data-target="<%= value['id_gantt'] %>"><i class="fa fa-plus"></i></button></td>
                            </tr>
                       <% }); %>
                   </tbody>
