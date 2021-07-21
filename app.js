@@ -35,27 +35,18 @@ app.get('/costos', async (req, res) => {
     //   res.render('gantt',{data:data});
 });
 
-app.post('/savecliente', urlencodedParser, (req, res)=>{
-    var values = [
-        [req.body.nombre_cliente,req.body.nombre_empresa,req.body.email,req.body.tel,req.body.direccion]
-    ];
-    fs.saveData('INSERT INTO cliente (nombre_cliente,nombre_empresa,email,tel,direccion) VALUES ?',values)
-    .then(function(value){
-        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
-    }).catch(function(value){
-        return res.end(JSON.stringify({ status: 'error',message:value }));
-    });
-});
-
 app.get('/clientesform', (req, res) => {
     return res.render('clientes_form');
 });
 
 app.get('/cotizadoform', async (req, res) => {
-    const result = await fs.queryData("SELECT * FROM cliente");
-    return res.render('cotizado_form',{data:result});
+    try{
+        const result = await fs.queryData("SELECT * FROM cliente");
+        return res.render('cotizado_form',{data:result});
+    }catch(e){
+        console.log(e);
+    }
 });
-
 
 app.get('/gantt', (req, res) => {
     var id =req.query.id_cotizacion;
@@ -68,13 +59,21 @@ app.get('/gantt', (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    var data = await fs.queryData('SELECT id_cotizado, nombre_proyecto FROM cotizado');
-    res.render('selection',{data:data});
+    try{
+        var data = await fs.queryData('SELECT id_cotizado, nombre_proyecto FROM cotizado');
+        res.render('selection',{data:data});
+    }catch(e){
+        console.log(e);
+    }
 });
 
 app.get('/formulario',async (req, res) => {
-    var data = await fs.queryData("SELECT * FROM cliente");
-    res.render('index',{data:data});
+    try{
+        var data = await fs.queryData("SELECT * FROM cliente");
+        res.render('index',{data:data});
+    }catch(e){
+        console.log(e);
+    }
 });
 
 app.post('/formulario', urlencodedParser, [ 
@@ -85,11 +84,35 @@ app.post('/formulario', urlencodedParser, [
         console.log(errors.array());
         return res.end(JSON.stringify({ status: 'error',message: errors.array(),valores:req.body}));
     }else{
-        fs.insertData(req.body);
+        try{
+            fs.insertData(req.body);
+        }catch(e){
+            return res.end(JSON.stringify({ status: 'error',message: e}));
+        }
         return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
     }
 });
 
+app.post('/savecliente', urlencodedParser, (req, res)=>{
+    var values = [
+        [req.body.nombre_cliente,req.body.nombre_empresa,req.body.email,req.body.tel,req.body.direccion]
+    ];
+    fs.saveData('INSERT INTO cliente (nombre_cliente,nombre_empresa,email,tel,direccion) VALUES ?',values)
+    .then(function(value){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(value){
+        return res.end(JSON.stringify({ status: 'error',message:value }));
+    });
+});
+
+app.post('/deleteAll', urlencodedParser, (req, res)=>{
+    console.log(req.body.id_cotizado);
+    fs.deleteAll(req.body.id_cotizado).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
 
 
 

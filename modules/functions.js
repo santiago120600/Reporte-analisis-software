@@ -85,8 +85,8 @@ module.exports.insertData =function(data){
             });
         });
     }catch(e){
-        console.log(e);
         db.rollback();
+        throw e.message; 
     }
 }
 
@@ -168,6 +168,45 @@ module.exports.listToStringGantt = function(arrayOfObjects){
     string_fecha_inicio =lista_fecha_inicio.toString();
     string_fecha_termina =lista_fecha_termina.toString();
     return {'actividades':string_actividades,'fecha_inicio':string_fecha_inicio,'fecha_termina':string_fecha_termina};
+}
+
+module.exports.deleteAll = function(id){
+    return new Promise((resolve,reject)=>{
+        db.beginTransaction(function(e){
+            db.query('DELETE FROM responsabilidades WHERE id_cotizado = ?',[id], (error,results)=>{
+                if (error) { 
+                    db.rollback();
+                    reject(error) 
+                }
+            });
+            db.query('DELETE FROM subcontrataciones WHERE id_cotizado = ?',[id], (error,results)=>{
+                if (error) { 
+                    db.rollback();
+                    reject(error) 
+                }
+            });
+            db.query('DELETE FROM gantt WHERE id_cotizado = ?',[id], (error,results)=>{
+                if (error) { 
+                    db.rollback();
+                    reject(error) 
+                }
+            });
+            db.query('DELETE FROM acuerdos WHERE id_cotizado = ?',[id], (error,results)=>{
+                if (error) { 
+                    db.rollback();
+                    reject(error) 
+                }
+            });
+            db.query('DELETE FROM cotizado WHERE id_cotizado = ?',[id], (error,results)=>{
+                if (error) { 
+                    db.rollback();
+                    reject(error) 
+                }else{
+                    resolve(results)
+                }
+            });
+        });
+    });
 }
 
 function convertDate(date){

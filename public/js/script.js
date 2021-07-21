@@ -62,6 +62,28 @@ $(function(){
         });
     });
 
+    $(document).on('click', '#delete_all', function(e) {
+        e.preventDefault();
+        id_cotizado = $(this).attr('data-target');
+        $.ajax({
+            'url': '/deleteAll',
+            'data': {"id_cotizado":id_cotizado},
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = "/";
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
     $(document).on('click', '#openModalCotizado', function(e) {
         e.preventDefault();
         $.ajax({
@@ -81,14 +103,7 @@ $(function(){
             'success': function(response) {
                 var convert_response = JSON.parse(response);
                 if (convert_response.status == "success") {
-                    $(document).find('#modalViewCotizado').modal('hide');
-                    Swal.fire(
-                        'Correcto',
-                        convert_response.message,
-                        'success'
-                    );
-                    //recargar el select de los proyectos
-                    // $(document).find('#data_container').empty().append(response);
+                    window.location = "/";
                 }else{
                     Swal.fire(
                         'Error',
