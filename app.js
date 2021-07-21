@@ -106,7 +106,6 @@ app.post('/savecliente', urlencodedParser, (req, res)=>{
 });
 
 app.post('/deleteAll', urlencodedParser, (req, res)=>{
-    console.log(req.body.id_cotizado);
     fs.deleteAll(req.body.id_cotizado).then(function(i){
         return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
     }).catch(function(e){

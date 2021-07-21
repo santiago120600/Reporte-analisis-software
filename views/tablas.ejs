@@ -150,6 +150,8 @@
                       <th scope="col">Actividad</th>
                       <th scope="col">Fecha Inicio</th>
                       <th scope="col">Fecha Termina</th>
+                      <th scope="col">Puntos cosmic</th>
+                      <th scope="col">Costo</th>
                       <th scope="col"></th>
                     </tr>
                   </thead>
@@ -160,6 +162,8 @@
                                <td><%= value['actividad'] %></td>
                                <td><%= value['fecha_inicio_actividad'] %></td>
                                <td><%= value['fecha_termina_actividad'] %></td>
+                               <td><%= value['puntos_cosmic'] %></td>
+                               <td><%= value['costo'] %></td>
                                 <td><button type="button" class="btn btn-danger" data-target="<%= value['id_gantt'] %>"><i class="fa fa-plus"></i></button></td>
                            </tr>
                       <% }); %>
@@ -168,6 +172,7 @@
               </div>
               </div>  
       </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
       <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="js/script.js"></script>

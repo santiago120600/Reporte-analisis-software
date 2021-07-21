@@ -9,7 +9,7 @@ $(function(){
 
     $(document).on('click','#agregar_actividad',function(e){
         e.preventDefault();
-        $('#table_actividades tr:last').after('<tr><td><input type="text" style="border: 0px solid;" name="actividad" required></td><td><input type="date" style="border: 0px solid;" name="fecha_inicio_actividad" required></td><td><input type="date" style="border: 0px solid;" name="fecha_termina_actividad" required></td></tr>');
+        $('#table_actividades tr:last').after('<tr><td><input type="text" style="border: 0px solid;" name="actividad" required></td><td><input type="date" style="border: 0px solid;" name="fecha_inicio_actividad" required></td><td><input type="date" style="border: 0px solid;" name="fecha_termina_actividad" required></td><td><input type="number" style="border: 0px solid;" name="puntos_cosmic" required></td></tr>');
     });
 
     $(document).on('click','#agregar_responsabilidad',function(e){
@@ -65,23 +65,36 @@ $(function(){
     $(document).on('click', '#delete_all', function(e) {
         e.preventDefault();
         id_cotizado = $(this).attr('data-target');
-        $.ajax({
-            'url': '/deleteAll',
-            'data': {"id_cotizado":id_cotizado},
-            'method': "post",
-            'success': function(response) {
-                var convert_response = JSON.parse(response);
-                if (convert_response.status == "success") {
-                    window.location = "/";
-                }else{
-                    Swal.fire(
-                        'Error',
-                        convert_response.message,
-                        'error'
-                    );
-                }
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteAll',
+                    'data': {"id_cotizado":id_cotizado},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = "/";
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
             }
         });
+
     });
 
     $(document).on('click', '#openModalCotizado', function(e) {

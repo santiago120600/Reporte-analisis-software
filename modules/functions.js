@@ -8,8 +8,8 @@ module.exports.insertData =function(data){
 
     var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
     var acuerdos =  data.acuerdos;
-    var sqlGantt = "INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,id_cotizado) VALUES ?";
-    var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad);
+    var sqlGantt = "INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,id_cotizado,puntos_cosmic) VALUES ?";
+    var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad,data.puntos_cosmic);
     var sqlSubcontrataciones = "INSERT INTO subcontrataciones(nombre,costo,id_cotizado) VALUES ?";
     var subcontrataciones = getSubcontrataciones(data.subcontrataciones,data.costo_subcontratacion);
     var sqlResponsabilidades = "INSERT INTO responsabilidades(responsabilidad,tipo,id_cotizado) VALUES ?";
@@ -40,7 +40,7 @@ module.exports.insertData =function(data){
                 // insertar en gantt 
                 for(i = 0; i < gantt.length; i++){
                     var value = [
-                        [gantt[i][0],gantt[i][1],gantt[i][2],result.insertId]
+                        [gantt[i][0],gantt[i][1],gantt[i][2],result.insertId,gantt[i][3]]
                     ];
                     db.query(sqlGantt,[value],function(err,result){
                         if (err) {
@@ -202,7 +202,12 @@ module.exports.deleteAll = function(id){
                     db.rollback();
                     reject(error) 
                 }else{
-                    resolve(results)
+                    db.commit(function(err) {
+                        if (err) {
+                            reject(err); 
+                        }
+                        resolve("success");
+                    });
                 }
             });
         });
