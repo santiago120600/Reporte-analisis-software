@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Editar Cotización</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form_cotizado_edit">
+    <div class="modal-body">
+        <!-- Input-->
+        <input type="hidden" value="<%=id_cotizado%>" name="id_cotizado" id="input_id_cotizado">
+        <div class="mb-3">
+            <label for="problema" class="form-label">Plantear problema/necesidad</label>
+            <textarea class="form-control" id="problema" rows="3" name="problema" required><%=problema%></textarea>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="objetivo_gral" class="form-label">Objetivo general del proyecto</label>
+            <textarea class="form-control" id="objetivo_gral" name="objetivo_gral" required><%=objetivo_gral%></textarea>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="alcance_proyecto" class="form-label">Alcance del proyecto</label>
+            <textarea class="form-control" id="alcance_proyecto" rows="3" name="alcance_proyecto"  required><%=alcance_proyecto%></textarea>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="factibilidad" class="form-label">Factibilidad (infraestructura del cliente)</label>
+            <textarea class="form-control" id="factibilidad" rows="3" name="factibilidad"  required><%=factibilidad%></textarea>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="presupuesto_cliente" class="form-label">Presupuesto cliente (opcional)</label>
+            <input type="number" class="form-control" id="presupuesto_cliente" name="presupuesto_cliente" value="<%=presupuesto_cliente%>">
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="horas_trabajo_semanales" class="form-label">Horas de trabajo diarias</label>
+            <input type="number" class="form-control" id="horas_trabajo_semanales" name="horas_trabajo_semanales" value="<%=horas_trabajo_semanales%>"
+                required>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="tiempo_entrega_semanas" class="form-label">Tiempo de entrega al cliente semanas</label>
+            <input type="number" class="form-control" id="tiempo_entrega" name="tiempo_entrega_semanas" value="<%=tiempo_entrega_semanas%>" required>
+        </div>
+        <!-- Input-->
+        <div class="mb-3">
+            <label for="observaciones_gantt" class="form-label">Observaciones del cliente sobre GANTT</label>
+            <textarea class="form-control" id="observaciones_gantt" rows="3" name="observaciones_gantt"
+                required><%=observaciones_gantt%></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+    </div>
+</form>

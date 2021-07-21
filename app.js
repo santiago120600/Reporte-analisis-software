@@ -36,7 +36,43 @@ app.get('/costos', async (req, res) => {
 });
 
 app.get('/clientesform', (req, res) => {
-    return res.render('clientes_form');
+    return res.render('clientes_edit_form');
+});
+
+app.get('/acuerdosform', (req, res) => {
+    return res.render('acuerdos_form');
+});
+
+app.get('/responsabilidadesform', (req, res) => {
+    return res.render('responsabilidades_form');
+});
+
+app.get('/subcontratacionesform', (req, res) => {
+    return res.render('subcontrataciones_form');
+});
+
+app.get('/cotizadoEditForm', (req, res) => {
+    id = req.query.id;
+    fs.queryData(`SELECT * FROM cotizado WHERE id_cotizado = ${id}`).then(function(value){
+        return res.render('cotizado_edit_form',{
+            id_cotizado: value[0]['id_cotizado'],
+            nombre_proyecto: value[0]['nombre_proyecto'],
+            problema: value[0]['problema'],
+            objetivo_gral: value[0]['objetivo_gral'],
+            alcance_proyecto: value[0]['alcance_proyecto'],
+            factibilidad: value[0]['factibilidad'],
+            presupuesto_cliente: value[0]['presupuesto_cliente'],
+            horas_trabajo_semanales: value[0]['horas_trabajo_semanales'],
+            tiempo_entrega_semanas: value[0]['tiempo_entrega_semanas'],
+            observaciones_gantt: value[0]['observaciones_gantt']
+        });
+    }).catch(function(e){
+        console.log(e);
+    });
+});
+
+app.get('/actividadesform', (req, res) => {
+    return res.render('actividades_form');
 });
 
 app.get('/cotizadoform', async (req, res) => {
@@ -76,7 +112,7 @@ app.get('/formulario',async (req, res) => {
     }
 });
 
-app.post('/formulario', urlencodedParser, [ 
+app.post('/formulario', urlencodedParser, [
     check('nombre_proyecto','Ingrese un nombre de proyecto').exists().isLength({max:80}).withMessage('Máximo 80 carácteres'),
 ], (req, res) =>{
     const errors = validationResult(req);
@@ -91,6 +127,14 @@ app.post('/formulario', urlencodedParser, [
         }
         return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
     }
+});
+
+app.post('/cotizadoEditForm', urlencodedParser, (req, res) =>{
+    fs.updateData('cotizado',req.body,{'id_cotizado':req.body.id_cotizado}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Actualizado correctamente'}));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message: e}));
+    })
 });
 
 app.post('/savecliente', urlencodedParser, (req, res)=>{

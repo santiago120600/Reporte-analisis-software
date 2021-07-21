@@ -251,6 +251,58 @@ $(function(){
         });
     });
 
+    $(document).on('click', '#editar-cotizado', function(e) {
+        e.preventDefault();
+        id = $(this).attr('data-target');
+        $.ajax({
+            'url': '/cotizadoEditForm',
+            "data":{"id":id},
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('click', '#add-acuerdo', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/acuerdosform',
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('click', '#add-responsabilidad', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/acuerdosform',
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('click', '#add-subcontratacion', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/subcontratacionesform',
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
+    $(document).on('click', '#add-actividad', function(e) {
+        e.preventDefault();
+        $.ajax({
+            'url': '/actividadesform',
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
     $(document).on('submit', '#form_cotizado', function(e) {
         e.preventDefault();
         $.ajax({
@@ -261,6 +313,28 @@ $(function(){
                 var convert_response = JSON.parse(response);
                 if (convert_response.status == "success") {
                     window.location = "/";
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_cotizado_edit', function(e) {
+        e.preventDefault();
+        id = $("#input_id_cotizado").val();
+        $.ajax({
+            'url': '/cotizadoEditForm',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = `general?id_cotizacion=${id}`;
                 }else{
                     Swal.fire(
                         'Error',
