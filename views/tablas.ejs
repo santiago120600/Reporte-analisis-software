@@ -75,7 +75,7 @@
                        <tr>
                            <th scope="col"><%= index+1 %></th>
                            <td><%= value['acuerdo'] %></td>
-                           <td><button type="button" class="btn btn-danger" data-target="<%= value['id_acuerdos'] %>"><i class="fa fa-plus"></i></button></td>
+                           <td><button type="button" class="btn btn-danger" id="delete-acuerdo"  data-cotizado="<%= id_cotizado %>" data-target="<%= value['id_acuerdos'] %>"><i class="fa fa-minus"></i></button></td>
                        </tr>
                   <% }); %>
               </tbody>
@@ -98,7 +98,7 @@
                            <th scope="col"><%= index+1 %></th>
                            <td><%= value['responsabilidad'] %></td>
                            <td><%= value['tipo'] %></td>
-                           <td><button type="button" class="btn btn-danger" data-target="<%= value['id_responsabilidad'] %>"><i class="fa fa-plus"></i></button></td>
+                           <td><button type="button" id="delete-responsabilidad"  class="btn btn-danger" data-cotizado="<%= id_cotizado %>" data-target="<%= value['id_responsabilidad'] %>"><i class="fa fa-minus"></i></button></td>
                        </tr>
                   <% }); %>
               </tbody>
@@ -122,7 +122,7 @@
                                    <th scope="col"><%= index+1 %></th>
                                    <td><%= value['nombre'] %></td>
                                    <td>$ <%= value['costo'] %></td>
-                                    <td><button type="button" class="btn btn-danger" data-target="<%= value['id_subcontrataciones'] %>"><i class="fa fa-plus"></i></button></td>
+                                    <td><button type="button" id="delete-subcontratacion"  class="btn btn-danger" data-cotizado="<%= id_cotizado %>" data-target="<%= value['id_subcontrataciones'] %>"><i class="fa fa-minus"></i></button></td>
                                </tr>
                           <% }); %>
                           <%  
@@ -164,7 +164,7 @@
                                <td><%= value['fecha_termina_actividad'] %></td>
                                <td><%= value['puntos_cosmic'] %></td>
                                <td><%= value['costo'] %></td>
-                                <td><button type="button" class="btn btn-danger" data-target="<%= value['id_gantt'] %>"><i class="fa fa-plus"></i></button></td>
+                                <td><button type="button" class="btn btn-danger" id="delete-actividad" data-target="<%= value['id_gantt'] %>" data-cotizado="<%= id_cotizado %>"><i class="fa fa-minus"></i></button></td>
                            </tr>
                       <% }); %>
                   </tbody>

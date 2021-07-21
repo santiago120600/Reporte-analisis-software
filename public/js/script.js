@@ -97,6 +97,150 @@ $(function(){
 
     });
 
+    $(document).on('click', '#delete-actividad', function(e) {
+        e.preventDefault();
+        id_actividad = $(this).attr('data-target');
+        id_cotizado = $(this).attr('data-cotizado');
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteGantt',
+                    'data': {"id_actividad":id_actividad},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = `/general?id_cotizacion=${id_cotizado}`;
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
+            }
+        });
+
+    });
+
+    $(document).on('click', '#delete-subcontratacion', function(e) {
+        e.preventDefault();
+        id = $(this).attr('data-target');
+        id_cotizado = $(this).attr('data-cotizado');
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteSubcontratacion',
+                    'data': {"id":id},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = `/general?id_cotizacion=${id_cotizado}`;
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
+            }
+        });
+
+    });
+
+    $(document).on('click', '#delete-responsabilidad', function(e) {
+        e.preventDefault();
+        id = $(this).attr('data-target');
+        id_cotizado = $(this).attr('data-cotizado');
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteResponsabilidad',
+                    'data': {"id":id},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = `/general?id_cotizacion=${id_cotizado}`;
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
+            }
+        });
+
+    });
+
+    $(document).on('click', '#delete-acuerdo', function(e) {
+        e.preventDefault();
+        id = $(this).attr('data-target');
+        id_cotizado = $(this).attr('data-cotizado');
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteAcuerdo',
+                    'data': {"id":id},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = `/general?id_cotizacion=${id_cotizado}`;
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
+            }
+        });
+
+    });
+
     $(document).on('click', '#openModalCotizado', function(e) {
         e.preventDefault();
         $.ajax({

@@ -113,6 +113,42 @@ app.post('/deleteAll', urlencodedParser, (req, res)=>{
     });
 });
 
+app.post('/deleteGantt', urlencodedParser, (req, res)=>{
+    id =req.body.id_actividad;
+    fs.deleteItem('gantt',{'id_gantt':id}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
+app.post('/deleteSubcontratacion', urlencodedParser, (req, res)=>{
+    id =req.body.id;
+    fs.deleteItem('subcontrataciones',{'id_subcontrataciones':id}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
+app.post('/deleteResponsabilidad', urlencodedParser, (req, res)=>{
+    id =req.body.id;
+    fs.deleteItem('responsabilidades',{'id_responsabilidad':id}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
+app.post('/deleteAcuerdo', urlencodedParser, (req, res)=>{
+    id =req.body.id;
+    fs.deleteItem('acuerdos',{'id_acuerdos':id}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
 
 
 
