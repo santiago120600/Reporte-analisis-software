@@ -2,9 +2,39 @@
     <h5 class="modal-title" id="exampleModalLabel">Agregar actividad</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<form id="form_clientes">
+<form id="form_actividades">
     <div class="modal-body">
-        
+        <div class="mb-3">
+            <input type="hidden" name="id_cotizado" value="<%=id_cotizado%>" id="input_id_cotizado">
+            <label for="gantt" class="form-label">Fases del proyecto GANTT</label>
+            <table class="table table-striped" id="table_actividades">
+                <thead>
+                    <tr>
+                        <th scope="col">Actividad</th>
+                        <th scope="col">Inicio</th>
+                        <th scope="col">Final</th>
+                        <th scope="col">Puntos cosmic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" style="border: 0px solid;" name="actividad" required>
+                        </td>
+                        <td>
+                            <input type="date" style="border: 0px solid;" name="fecha_inicio_actividad" required>
+                        </td>
+                        <td>
+                            <input type="date" style="border: 0px solid;" name="fecha_termina_actividad" required>
+                        </td>
+                        <td>
+                            <input type="number" style="border: 0px solid;" name="puntos_cosmic" required>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+          <button class="btn btn-success" id="agregar_actividad"><i class="fa fa-plus"></i></button>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

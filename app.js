@@ -40,15 +40,23 @@ app.get('/clientesform', (req, res) => {
 });
 
 app.get('/acuerdosform', (req, res) => {
-    return res.render('acuerdos_form');
+    id = req.query.id;
+    return res.render('acuerdos_form',{"id_cotizado":id});
 });
 
 app.get('/responsabilidadesform', (req, res) => {
-    return res.render('responsabilidades_form');
+    id = req.query.id;
+    return res.render('responsabilidades_form',{"id_cotizado":id});
 });
 
 app.get('/subcontratacionesform', (req, res) => {
-    return res.render('subcontrataciones_form');
+    id = req.query.id;
+    return res.render('subcontrataciones_form',{"id_cotizado":id});
+});
+
+app.get('/actividadesform', (req, res) => {
+    id = req.query.id;
+    return res.render('actividades_form',{"id_cotizado":id});
 });
 
 app.get('/cotizadoEditForm', (req, res) => {
@@ -69,10 +77,6 @@ app.get('/cotizadoEditForm', (req, res) => {
     }).catch(function(e){
         console.log(e);
     });
-});
-
-app.get('/actividadesform', (req, res) => {
-    return res.render('actividades_form');
 });
 
 app.get('/cotizadoform', async (req, res) => {
@@ -190,6 +194,88 @@ app.post('/deleteAcuerdo', urlencodedParser, (req, res)=>{
         return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
     }).catch(function(e){
         return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
+app.post('/newAcuerdo', urlencodedParser, (req, res)=>{
+    var values = [];
+    id_cotizado =req.body.id_cotizado;
+    acuerdos = req.body.acuerdos;
+    if(Array.isArray(acuerdos)==false){
+        values = [[acuerdos,id_cotizado]];
+    }else{
+        acuerdos.forEach((value)=>{
+            values.push([value,id_cotizado]);
+        })
+    } 
+    fs.saveData('INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?',values)
+    .then(function(value){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(value){
+        return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
+    });
+});
+
+app.post('/newResponsabilidad', urlencodedParser, (req, res)=>{
+    var values = [];
+    id_cotizado =req.body.id_cotizado;
+    responsabilidad = req.body.responsabilidades;
+    responsabilidad_tipo = req.body.responsabilidad_tipo;
+    if(Array.isArray(responsabilidad)==false){
+        values = [[responsabilidad,responsabilidad_tipo,id_cotizado]];
+    }else{
+        for (i = 0; i < responsabilidad.length; i++) {
+            values.push([responsabilidad[i],responsabilidad_tipo[i],id_cotizado]);
+        }
+    } 
+    fs.saveData('INSERT INTO responsabilidades (responsabilidad,tipo,id_cotizado) VALUES ?',values)
+    .then(function(value){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(value){
+        return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
+    });
+});
+
+app.post('/newSubcontratacion', urlencodedParser, (req, res)=>{
+    var values = [];
+    id_cotizado =req.body.id_cotizado;
+    subcontrataciones = req.body.subcontrataciones;
+    costo = req.body.costo_subcontratacion;
+    if(Array.isArray(subcontrataciones)==false){
+        values = [[subcontrataciones,costo,id_cotizado]];
+    }else{
+        for (i = 0; i < subcontrataciones.length; i++) {
+            values.push([subcontrataciones[i],costo[i],id_cotizado]);
+        }
+    } 
+    fs.saveData('INSERT INTO subcontrataciones (nombre,costo,id_cotizado) VALUES ?',values)
+    .then(function(value){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(value){
+        return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
+    });
+});
+
+app.post('/newActividad', urlencodedParser, (req, res)=>{
+    var values = [];
+    id_cotizado =req.body.id_cotizado;
+    actividades = req.body.actividad;
+    fecha_inicio = req.body.fecha_inicio_actividad;
+    fecha_termina = req.body.fecha_termina_actividad;
+    puntos = req.body.puntos_cosmic;
+    if(Array.isArray(actividades)==false){
+        values = [[actividades,fecha_inicio,fecha_termina,puntos,id_cotizado]];
+    }else{
+        for (i = 0; i < actividades.length; i++) {
+            values.push([actividades[i],fecha_inicio[i],fecha_termina[i],puntos[i],id_cotizado]);
+        }
+    } 
+    console.log(values);
+    fs.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado) VALUES ?',values)
+    .then(function(value){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(value){
+        return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
     });
 });
 

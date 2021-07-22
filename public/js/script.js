@@ -265,8 +265,10 @@ $(function(){
 
     $(document).on('click', '#add-acuerdo', function(e) {
         e.preventDefault();
+        id = $(this).attr('data-cotizado');
         $.ajax({
             'url': '/acuerdosform',
+            'data':{"id":id},
             'success': function(response) {
                 $(document).find('#modalContent').empty().append(response);
             }
@@ -275,8 +277,10 @@ $(function(){
 
     $(document).on('click', '#add-responsabilidad', function(e) {
         e.preventDefault();
+        id = $(this).attr('data-cotizado');
         $.ajax({
-            'url': '/acuerdosform',
+            'url': '/responsabilidadesform',
+            'data':{"id":id},
             'success': function(response) {
                 $(document).find('#modalContent').empty().append(response);
             }
@@ -285,8 +289,10 @@ $(function(){
 
     $(document).on('click', '#add-subcontratacion', function(e) {
         e.preventDefault();
+        id = $(this).attr('data-cotizado');
         $.ajax({
             'url': '/subcontratacionesform',
+            'data':{"id":id},
             'success': function(response) {
                 $(document).find('#modalContent').empty().append(response);
             }
@@ -295,8 +301,10 @@ $(function(){
 
     $(document).on('click', '#add-actividad', function(e) {
         e.preventDefault();
+        id = $(this).attr('data-cotizado');
         $.ajax({
             'url': '/actividadesform',
+            'data':{"id":id},
             'success': function(response) {
                 $(document).find('#modalContent').empty().append(response);
             }
@@ -329,6 +337,93 @@ $(function(){
         id = $("#input_id_cotizado").val();
         $.ajax({
             'url': '/cotizadoEditForm',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = `general?id_cotizacion=${id}`;
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+    $(document).on('submit', '#form_actividades', function(e) {
+        e.preventDefault();
+        id = $("#input_id_cotizado").val();
+        $.ajax({
+            'url': '/newActividad',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = `general?id_cotizacion=${id}`;
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_acuerdos', function(e) {
+        e.preventDefault();
+        id = $("#input_id_cotizado").val();
+        $.ajax({
+            'url': '/newAcuerdo',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = `general?id_cotizacion=${id}`;
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_responsabilidades', function(e) {
+        e.preventDefault();
+        id = $("#input_id_cotizado").val();
+        $.ajax({
+            'url': '/newResponsabilidad',
+            'data': $(this).serializeArray(),
+            'method': "post",
+            'success': function(response) {
+                var convert_response = JSON.parse(response);
+                if (convert_response.status == "success") {
+                    window.location = `general?id_cotizacion=${id}`;
+                }else{
+                    Swal.fire(
+                        'Error',
+                        convert_response.message,
+                        'error'
+                    );
+                }
+            }
+        });
+    });
+
+    $(document).on('submit', '#form_subcontrataciones', function(e) {
+        e.preventDefault();
+        id = $("#input_id_cotizado").val();
+        $.ajax({
+            'url': '/newSubcontratacion',
             'data': $(this).serializeArray(),
             'method': "post",
             'success': function(response) {

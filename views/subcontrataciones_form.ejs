@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Agregar Subcontratación</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form_subcontrataciones">
+    <div class="modal-body">
+      <input type="hidden" name="id_cotizado" value="<%=id_cotizado%>" id="input_id_cotizado">
+      <div class="row">
+        <div class="col-8">
+          <!-- Input-->  
+           <div class="mb-3">
+             <label for="subcontrataciones" class="form-label">Subcontrataciones (nombre)</label>
+             <input type="text" class="form-control" id="subcontrataciones" name="subcontrataciones">
+           </div>
+        </div>
+        <div class="col-4">
+          <!-- Input-->  
+          <div class="mb-3">
+            <label for="costo_subcontratacion" class="form-label">Costo</label>
+            <input type="number" class="form-control" id="costo_subcontratacion" name="costo_subcontratacion">
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-success" id="agregar_subcontrataciones"><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
+    </div>
+    </div>
+</form>

@@ -2,9 +2,14 @@
     <h5 class="modal-title" id="exampleModalLabel">Agregar Acuerdo</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<form id="form_clientes">
+<form id="form_acuerdos">
     <div class="modal-body">
-        
+        <div class="mb-3">
+            <input type="hidden" name="id_cotizado" value="<%=id_cotizado%>" id="input_id_cotizado">
+            <label for="acuerdos" class="form-label">Acuerdos con cliente</label>
+            <input  class="form-control" id="acuerdos" name="acuerdos" required>
+          </div>
+          <button class="btn btn-success" id="agregar_acuerdo"><i class="fa fa-plus"></i></button>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
