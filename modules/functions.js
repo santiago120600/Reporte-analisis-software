@@ -219,13 +219,14 @@ module.exports.generaraGastosFijos = function(lista_gastos){
     tel = ((lista_gastos['tel'] == '') ? 0 : parseFloat(lista_gastos['tel']));
     renta = ((lista_gastos['renta'] == '') ? 0 : parseFloat(lista_gastos['renta']));
     agua = ((lista_gastos['agua'] == '') ? 0 : parseFloat(lista_gastos['agua']));
+    gas = ((lista_gastos['gas'] == '') ? 0 : parseFloat(lista_gastos['gas']));
     luz = ((lista_gastos['luz'] == '') ? 0 : parseFloat(lista_gastos['luz']));
     supermercado = ((lista_gastos['super'] == '') ? 0 : parseFloat(lista_gastos['super']));
     tv = ((lista_gastos['tv'] == '') ? 0 : parseFloat(lista_gastos['tv']));
     equipo = ((lista_gastos['equipo'] == '') ? 0 : parseFloat(lista_gastos['equipo']));
     gasolina = ((lista_gastos['gasolina'] == '') ? 0 : parseFloat(lista_gastos['gasolina']));
     carro = ((lista_gastos['carro'] == '') ? 0 : parseFloat(lista_gastos['carro']));
-    gastos_fijos_mensuales = cel+tel+renta+agua+luz+supermercado+tv+equipo+gasolina+carro;
+    gastos_fijos_mensuales = cel+tel+renta+agua+luz+supermercado+tv+equipo+gasolina+carro+gas;
     return gastos_fijos_mensuales * 12;
 }
 

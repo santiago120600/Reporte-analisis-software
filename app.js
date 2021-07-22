@@ -273,7 +273,6 @@ app.post('/newActividad', urlencodedParser, (req, res)=>{
             values.push([actividades[i],fecha_inicio[i],fecha_termina[i],puntos[i],id_cotizado]);
         }
     } 
-    console.log(values);
     fs.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado) VALUES ?',values)
     .then(function(value){
         return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
@@ -284,14 +283,13 @@ app.post('/newActividad', urlencodedParser, (req, res)=>{
 
 
 app.post('/gastos', urlencodedParser, (req, res)=>{
-    gastos_fijos_anuales = fs.generaraGastosFijos({cel:req.body.cel,tel:req.body.tel,renta:req.body.renta,agua:req.body.agua,luz:req.body.luz,super:req.body.super,tv:req.body.tv,equipo:req.body.equipo,gasolina:req.body.gasolina,carro:req.body.carro});
-    sueldo = req.body.sueldo;
-    ingreso_anual = sueldo * 12;
+    gastos_fijos_anuales = fs.generaraGastosFijos({cel:req.body.cel,tel:req.body.tel,renta:req.body.renta,agua:req.body.agua,gas:req.body.gas,luz:req.body.luz,super:req.body.super,tv:req.body.tv,equipo:req.body.equipo,gasolina:req.body.gasolina,carro:req.body.carro});
+    ingreso_anual = parseFloat(req.body.sueldo);
     horas_produccion = 1330;
     costo_hora = (ingreso_anual+gastos_fijos_anuales) / horas_produccion;
     precio_venta = costo_hora + (costo_hora * 0.2)
     precio_hora_mas_impuestos = precio_venta + (precio_venta * 0.35)
-    fs.updateData('costos',{'costo_hora':costo_hora,'precio_venta':precio_venta,'costo_con_impuestos':precio_hora_mas_impuestos,'gastos_fijos_anuales':gastos_fijos_anuales,'sueldo':sueldo},{'id_costos':1}).then(function(i){
+    fs.updateData('costos',{'costo_hora':costo_hora,'precio_venta':precio_venta,'costo_con_impuestos':precio_hora_mas_impuestos,'gastos_fijos_anuales':gastos_fijos_anuales,'sueldo':ingreso_anual},{'id_costos':1}).then(function(i){
         return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
     }).catch(function(e){
         return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
