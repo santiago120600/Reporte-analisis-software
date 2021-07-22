@@ -26,7 +26,7 @@ app.get('/general', async (req, res) => {
     var gantt =  await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id_proyecto} ORDER BY fecha_inicio_actividad`);
     var subcontrataciones =  await fs.queryData(`SELECT * FROM subcontrataciones WHERE id_cotizado = ${id_proyecto}`);
     var responsabilidades =  await fs.queryData(`SELECT * FROM responsabilidades WHERE id_cotizado = ${id_proyecto}`);
-    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], horas_trabajo_semanales:cotizado[0]['horas_trabajo_semanales'],});
+    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email']});
 });
 
 app.get('/costos', async (req, res) => {
@@ -36,7 +36,7 @@ app.get('/costos', async (req, res) => {
 });
 
 app.get('/clientesform', (req, res) => {
-    return res.render('clientes_edit_form');
+    return res.render('clientes_form');
 });
 
 app.get('/acuerdosform', (req, res) => {
@@ -70,7 +70,6 @@ app.get('/cotizadoEditForm', (req, res) => {
             alcance_proyecto: value[0]['alcance_proyecto'],
             factibilidad: value[0]['factibilidad'],
             presupuesto_cliente: value[0]['presupuesto_cliente'],
-            horas_trabajo_semanales: value[0]['horas_trabajo_semanales'],
             tiempo_entrega_semanas: value[0]['tiempo_entrega_semanas'],
             observaciones_gantt: value[0]['observaciones_gantt']
         });
@@ -86,6 +85,10 @@ app.get('/cotizadoform', async (req, res) => {
     }catch(e){
         console.log(e);
     }
+});
+
+app.get('/costosform', async (req, res) => {
+    return res.render('costos_form');
 });
 
 app.get('/gantt', (req, res) => {
@@ -279,6 +282,21 @@ app.post('/newActividad', urlencodedParser, (req, res)=>{
     });
 });
 
+
+app.post('/gastos', urlencodedParser, (req, res)=>{
+    gastos_fijos_anuales = fs.generaraGastosFijos({cel:req.body.cel,tel:req.body.tel,renta:req.body.renta,agua:req.body.agua,luz:req.body.luz,super:req.body.super,tv:req.body.tv,equipo:req.body.equipo,gasolina:req.body.gasolina,carro:req.body.carro});
+    sueldo = req.body.sueldo;
+    ingreso_anual = sueldo * 12;
+    horas_produccion = 1330;
+    costo_hora = (ingreso_anual+gastos_fijos_anuales) / horas_produccion;
+    precio_venta = costo_hora + (costo_hora * 0.2)
+    precio_hora_mas_impuestos = precio_venta + (precio_venta * 0.35)
+    fs.updateData('costos',{'costo_hora':costo_hora,'precio_venta':precio_venta,'costo_con_impuestos':precio_hora_mas_impuestos,'gastos_fijos_anuales':gastos_fijos_anuales,'sueldo':sueldo},{'id_costos':1}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
+    });
+});
 
 
 

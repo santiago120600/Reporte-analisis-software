@@ -1,9 +1,9 @@
 var db = require('../db');
 
 module.exports.insertData =function(data){
-    var sql = "INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente, horas_trabajo_semanales, tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?";
+    var sql = "INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?";
     var values = [
-        [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.horas_trabajo_semanales,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
+        [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
         ];
 
     var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
@@ -212,6 +212,21 @@ module.exports.deleteAll = function(id){
             });
         });
     });
+}
+
+module.exports.generaraGastosFijos = function(lista_gastos){
+    cel = ((lista_gastos['cel'] == '') ? 0 : parseFloat(lista_gastos['cel']));
+    tel = ((lista_gastos['tel'] == '') ? 0 : parseFloat(lista_gastos['tel']));
+    renta = ((lista_gastos['renta'] == '') ? 0 : parseFloat(lista_gastos['renta']));
+    agua = ((lista_gastos['agua'] == '') ? 0 : parseFloat(lista_gastos['agua']));
+    luz = ((lista_gastos['luz'] == '') ? 0 : parseFloat(lista_gastos['luz']));
+    supermercado = ((lista_gastos['super'] == '') ? 0 : parseFloat(lista_gastos['super']));
+    tv = ((lista_gastos['tv'] == '') ? 0 : parseFloat(lista_gastos['tv']));
+    equipo = ((lista_gastos['equipo'] == '') ? 0 : parseFloat(lista_gastos['equipo']));
+    gasolina = ((lista_gastos['gasolina'] == '') ? 0 : parseFloat(lista_gastos['gasolina']));
+    carro = ((lista_gastos['carro'] == '') ? 0 : parseFloat(lista_gastos['carro']));
+    gastos_fijos_mensuales = cel+tel+renta+agua+luz+supermercado+tv+equipo+gasolina+carro;
+    return gastos_fijos_mensuales * 12;
 }
 
 function convertDate(date){
