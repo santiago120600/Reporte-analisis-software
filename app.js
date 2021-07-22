@@ -29,10 +29,14 @@ app.get('/general', async (req, res) => {
     return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email']});
 });
 
-app.get('/costos', async (req, res) => {
-      var data = await fs.queryData('SELECT * FROM costos');
-      console.log(data);
-    //   res.render('gantt',{data:data});
+app.get('/costos', (req, res) => {
+    id_cotizacion = req.query.id_cotizacion;
+    fs.queryData('SELECT * FROM costos WHERE id_costos = 1')
+    .then(function(i){
+          res.render('costos',{costo_hora:i[0]['costo_hora'],precio_venta:i[0]['precio_venta'],costo_impuestos:i[0]['costo_con_impuestos'],gastos:i[0]['gastos_fijos_anuales'],sueldo:i[0]['sueldo'],id:id_cotizacion});
+    }).catch(function(e){
+    console.log(e.sqlMessage);
+    });
 });
 
 app.get('/clientesform', (req, res) => {
