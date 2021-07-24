@@ -131,12 +131,13 @@ app.post('/formulario', urlencodedParser, [
         console.log(errors.array());
         return res.end(JSON.stringify({ status: 'error',message: errors.array(),valores:req.body}));
     }else{
-        try{
-            fs.insertData(req.body);
-        }catch(e){
+        fs.insertData(req.body).then(function(i){
+            console.log(i);
+            return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
+        }).catch(function(e){
+            console.log(e);
             return res.end(JSON.stringify({ status: 'error',message: e}));
-        }
-        return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
+        });
     }
 });
 

@@ -1,94 +1,144 @@
 var db = require('../db');
 
-module.exports.insertData =function(data){
-    var sql = "INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?";
-    var values = [
-        [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
-        ];
-
-    var sqlAcuerdos = "INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?";
-    var acuerdos =  data.acuerdos;
-    var sqlGantt = "INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,id_cotizado,puntos_cosmic) VALUES ?";
-    var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad,data.puntos_cosmic);
-    var sqlSubcontrataciones = "INSERT INTO subcontrataciones(nombre,costo,id_cotizado) VALUES ?";
-    var subcontrataciones = getSubcontrataciones(data.subcontrataciones,data.costo_subcontratacion);
-    var sqlResponsabilidades = "INSERT INTO responsabilidades(responsabilidad,tipo,id_cotizado) VALUES ?";
-    var responsabilidades = getSubcontrataciones(data.responsabilidades,data.responsabilidad_tipo);
-
-    try{
-        db.beginTransaction(function(e){
-            if (e) { throw e; }
-            // Insertar en la tabla de cotizado
-            db.query(sql, [values], function(err, result) { 
-                if (err) {
-                    throw err;
-                }else{
-                // insertar en acuerdos   
-                if(Array.isArray(acuerdos)==false){
-                    acuerdos = new Array(acuerdos);
-                }  
-                for(i = 0; i < acuerdos.length; i++){
-                    var value = [
-                        [acuerdos[i],result.insertId]
-                    ];
-                    db.query(sqlAcuerdos,[value],function(err,result){
-                        if (err) {
-                                throw err;
+module.exports.insertData = async function(data){
+    return new Promise((resolve,reject)=>{
+        var values = [
+            [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
+            ];
+        try{
+            db.beginTransaction(function(e){
+                if(e) reject(e.sqlMessage);
+                // Cotizado
+                db.query('INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?', [values], function(e, result) { 
+                    if (e) { 
+                        db.rollback();
+                        reject(e.sqlMessage); 
+                    }else{
+                        last_inserted_id = result.insertId;
+                        // acuerdos
+                        var acuerdos =  data.acuerdos;
+                        if(Array.isArray(acuerdos)==false){
+                            acuerdos = new Array(acuerdos);
+                        }
+                        for(i = 0; i < acuerdos.length; i++){
+                            var value = [
+                                [acuerdos[i],last_inserted_id]
+                            ];
+                            module.exports.saveData("INSERT INTO acuerdos (acuerdo,id_cotizado) VALUES ?", value).then(function(i){
+                                // console.log(i);
+                            }).catch(function(e){
+                                db.rollback();
+                                reject(e.sqlMessage); 
+                            });
+                        }
+                        // gantt
+                        var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad,data.puntos_cosmic);
+                        for(i = 0; i < gantt.length; i++){
+                            var value = [
+                                [gantt[i]['actividad'],gantt[i]['fecha_inicio'],gantt[i]['fecha_termina'],gantt[i]['puntos'],last_inserted_id]
+                            ];
+                            module.exports.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado) VALUES ?',value).then(function(i){
+                                console.log(i);
+                            }).catch(function(e){
+                                db.rollback();
+                                reject(e.sqlMessage); 
+                            });
+                        }
+                        // subcontrataciones
+                        var subcontrataciones = getSubcontrataciones(data.subcontrataciones,data.costo_subcontratacion);
+                        if(data.subcontrataciones!=''){
+                            for(i = 0; i < subcontrataciones.length; i++){
+                                var value = [
+                                    [subcontrataciones[i]['nombre'],subcontrataciones[i]['costo'],last_inserted_id]
+                                ];
+                                module.exports.saveData('INSERT INTO subcontrataciones(nombre,costo,id_cotizado) VALUES ?',value).then(function(i){
+                                    // console.log(i);
+                                }).catch(function(e){
+                                    db.rollback();
+                                    reject(e.sqlMessage); 
+                                });
                             }
-                    });
-                } 
-                // insertar en gantt 
-                for(i = 0; i < gantt.length; i++){
-                    var value = [
-                        [gantt[i][0],gantt[i][1],gantt[i][2],result.insertId,gantt[i][3]]
-                    ];
-                    db.query(sqlGantt,[value],function(err,result){
-                        if (err) {
-                                throw err;
+                        }
+                        // responsabilidades
+                        var responsabilidades = getResponsabilidades(data.responsabilidades,data.responsabilidad_tipo);
+                        if(responsabilidades!=''){
+                            for(i = 0; i < responsabilidades.length; i++){
+                                var value = [
+                                    [responsabilidades[i]['responsabilidad'],responsabilidades[i]['responsable'],last_inserted_id]
+                                ];
+                                module.exports.saveData('INSERT INTO responsabilidades(responsabilidad,tipo,id_cotizado) VALUES ?',value).then(function(i){
+                                    // console.log(i);
+                                }).catch(function(e){
+                                    db.rollback();
+                                    reject(e.sqlMessage); 
+                                });
                             }
-                    });
-                } 
-
-                // insertar en subcontrataciones 
-                if(data.subcontrataciones!=''){
-                    for(i = 0; i < subcontrataciones.length; i++){
-                        var value = [
-                            [subcontrataciones[i][0],subcontrataciones[i][1],result.insertId]
-                        ];
-                        db.query(sqlSubcontrataciones,[value],function(err,result){
-                            if (err) {
-                                    throw err;
-                                }
+                        }
+                        db.commit(function(e) {
+                            if (e) {
+                                db.rollback();
+                                reject(e.sqlMessage); 
+                            }else{
+                                resolve("success");
+                            }
                         });
-                    } 
-                }
-                // insertar en responsabilidades 
-                for(i = 0; i < responsabilidades.length; i++){
-                    var value = [
-                        [responsabilidades[i][0],responsabilidades[i][1],result.insertId]
-                    ];
-                    db.query(sqlResponsabilidades,[value],function(err,result){
-                        if (err) {
-                                throw err;
-                            }
-                    });
-                } 
-                }
-            });
+                    }
 
-    
-            db.commit(function(err) {
-                if (err) {
-                    throw err;
-                }
-                console.log('success!');
+                });
             });
-        });
-    }catch(e){
-        db.rollback();
-        throw e.message; 
-    }
+        }catch(e){
+            db.rollback();
+            reject(e.sqlMessage); 
+        }    
+    });
 }
+
+const getGantt = (lista_actividades,lista_fecha_inicio,lista_fecha_termina, lista_puntos) =>{
+    // retornar una lista de objetos [{actividad:"actividad",fecha_inicio:"2020-06-12",fecha_termina:"2020-06-12",puntos:8}]
+    if(Array.isArray(lista_actividades)==false && Array.isArray(lista_fecha_inicio)==false && Array.isArray(lista_fecha_termina)==false &&Array.isArray(lista_puntos)==false){
+        lista_actividades = new Array(lista_actividades);
+        lista_fecha_inicio = new Array(lista_fecha_inicio);
+        lista_fecha_termina = new Array(lista_fecha_termina);
+        lista_puntos = new Array(lista_puntos);
+    }  
+    const lista = [];
+    for (i = 0; i < lista_actividades.length; i++) {
+        lista.push({actividad:lista_actividades[i],fecha_inicio:lista_fecha_inicio[i],fecha_termina:lista_fecha_termina[i],puntos:lista_puntos[i]});
+    }
+    return lista;
+}
+
+const getSubcontrataciones = (lista_nombres,lista_costos)=>{
+    // retorn una lista de objetos [{nombre:'Juan',costo:10000}]
+    if(lista_nombres==''){
+        return [];
+    }  
+    if(Array.isArray(lista_nombres)==false && Array.isArray(lista_costos)==false){
+        lista_nombres = new Array(lista_nombres);
+        lista_costos = new Array(lista_costos);
+    }  
+    const lista = [];
+    for (i = 0; i < lista_nombres.length; i++) {
+      lista.push({nombre:lista_nombres[i],costo:lista_costos[i]});
+    }
+    return lista;
+  }
+
+const getResponsabilidades = (lista_responsabilidades,lista_responsable)=>{
+    // retorn una lista de objetos [{responsabilidad:'cobrar',responsable:'Desarrollador'}]
+    if(lista_responsabilidades==''){
+        return [];
+    }  
+    if(Array.isArray(lista_responsabilidades)==false && Array.isArray(lista_responsable)==false){
+        lista_responsabilidades = new Array(lista_responsabilidades);
+        lista_responsable = new Array(lista_responsable);
+    }  
+    const lista = [];
+    for (i = 0; i < lista_responsabilidades.length; i++) {
+      lista.push({responsabilidad:lista_responsabilidades[i],responsable:lista_responsable[i]});
+    }
+    return lista;
+  }
 
 module.exports.deleteItem = function(table,where){
     return new Promise((resolve, reject)=>{
@@ -122,37 +172,6 @@ module.exports.saveData = function(query,data){
             return error ? reject(error) : resolve(results);
         });
     });
-}
-
-
-
-const getSubcontrataciones = (lista_nombres,lista_costos)=>{
-    if(lista_nombres==''){
-        return [];
-    }  
-    if(Array.isArray(lista_nombres)==false && Array.isArray(lista_costos)==false){
-        lista_nombres = new Array(lista_nombres);
-        lista_costos = new Array(lista_costos);
-    }  
-    const lista = [];
-    for (i = 0; i < lista_nombres.length; i++) {
-      lista.push([lista_nombres[i],lista_costos[i]]);
-    }
-    return lista;
-  }
-
-const getGantt = (lista_actividades,lista_fecha_inicio,lista_fecha_termina) =>{
-    // retornar una lista de listas [["actividad","2020-06-12","2020-06-12"],["actividad","2020-06-12","2020-06-12"]]
-    if(Array.isArray(lista_actividades)==false && Array.isArray(lista_fecha_inicio)==false && Array.isArray(lista_fecha_termina)==false){
-        lista_actividades = new Array(lista_actividades);
-        lista_fecha_inicio = new Array(lista_fecha_inicio);
-        lista_fecha_termina = new Array(lista_fecha_termina);
-    }  
-    const lista = [];
-    for (i = 0; i < lista_actividades.length; i++) {
-        lista.push([lista_actividades[i],lista_fecha_inicio[i],lista_fecha_termina[i]]);
-    }
-    return lista;
 }
 
 module.exports.listToStringGantt = function(arrayOfObjects){
