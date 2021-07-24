@@ -8,10 +8,11 @@ CREATE TABLE costos(
     costo_con_impuestos DOUBLE, 
     precio_venta DOUBLE,
     gastos_fijos_anuales DOUBLE,
-    sueldo DOUBLE
+    sueldo DOUBLE,
+    puntos_funcion_mes INT
 );
 
-INSERT INTO costos VALUES(null,0,0,0,0,0);
+INSERT INTO costos VALUES(null,220,356,264,167400,125000,36);
 
 CREATE TABLE cliente(
     id_cliente INT PRIMARY KEY AUTO_INCREMENT,
@@ -37,10 +38,12 @@ CREATE TABLE cotizado(
     costo_final  DOUBLE,
     estimacion DOUBLE,
     id_cliente INT NOT NULL,
-    puntos__funcion_mes INT,
-    FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente)
+    FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente),
+    costo_punto_funcion DOUBLE,
+    costo_subcontrataciones DOUBLE,
+    duracion_proyecto DOUBLE
 );
-INSERT INTO cotizado VALUES(null,'proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,'Observacion gantt',null,null,1,19);
+INSERT INTO cotizado VALUES(null,'proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,'Observacion gantt',null,null,1,null,null,null);
 
 CREATE  TABLE acuerdos(
     id_acuerdos INT PRIMARY KEY AUTO_INCREMENT,

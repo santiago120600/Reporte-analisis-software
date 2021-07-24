@@ -5,8 +5,12 @@
 <form id="form_gastos">
     <div class="modal-body">
         <div class="mb-3">
+            <label for="puntos" class="form-label">Puntos de función promedio mensuales</label>
+            <input type="number" class="form-control" id="puntos" name="puntos" required value="<%=data['puntos_funcion_mes']%>">
+        </div>
+        <div class="mb-3">
             <label for="sueldo" class="form-label">Sueldo anual</label>
-            <input type="number" class="form-control" id="sueldo" name="sueldo" required>
+            <input type="number" class="form-control" id="sueldo" name="sueldo" required value="<%=data['sueldo']%>">
         </div>
         <p class="border-bottom">Comunicaciones</p>
         <div class="mb-3">

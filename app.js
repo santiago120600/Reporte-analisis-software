@@ -26,14 +26,14 @@ app.get('/general', async (req, res) => {
     var gantt =  await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id_proyecto} ORDER BY fecha_inicio_actividad`);
     var subcontrataciones =  await fs.queryData(`SELECT * FROM subcontrataciones WHERE id_cotizado = ${id_proyecto}`);
     var responsabilidades =  await fs.queryData(`SELECT * FROM responsabilidades WHERE id_cotizado = ${id_proyecto}`);
-    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email']});
+    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], problema:cotizado[0]['problema'],objetivo:cotizado[0]['objetivo_gral'],alcance:cotizado[0]['alcance_proyecto'],factibilidad:cotizado[0]['factibilidad'],presupuesto:cotizado[0]['presupuesto_cliente'],tiempo_entrega:cotizado[0]['tiempo_entrega_semanas'],observaciones_gantt:cotizado[0]['observaciones_gantt'],costo_final:cotizado[0]['costo_final'],estimacion:cotizado[0]['estimacion']});
 });
 
 app.get('/costos', (req, res) => {
     id_cotizacion = req.query.id_cotizacion;
     fs.queryData('SELECT * FROM costos WHERE id_costos = 1')
     .then(function(i){
-          res.render('costos',{costo_hora:i[0]['costo_hora'],precio_venta:i[0]['precio_venta'],costo_impuestos:i[0]['costo_con_impuestos'],gastos:i[0]['gastos_fijos_anuales'],sueldo:i[0]['sueldo'],id:id_cotizacion});
+          res.render('costos',{costo_hora:i[0]['costo_hora'],precio_venta:i[0]['precio_venta'],costo_impuestos:i[0]['costo_con_impuestos'],gastos:i[0]['gastos_fijos_anuales'],sueldo:i[0]['sueldo'],id:id_cotizacion,puntos:i[0]['puntos_funcion_mes']});
     }).catch(function(e){
     console.log(e.sqlMessage);
     });
@@ -92,7 +92,12 @@ app.get('/cotizadoform', async (req, res) => {
 });
 
 app.get('/costosform', async (req, res) => {
-    return res.render('costos_form');
+    //mandar la informacion de los costos para mostrarlos en el formulario
+    fs.queryData('SELECT * FROM costos WHERE id_costos = 1').then(function(i){
+        return res.render('costos_form',{data:i[0]});
+    }).catch(function(e){
+        console.log(e);
+    })
 });
 
 app.get('/gantt', (req, res) => {
@@ -131,13 +136,20 @@ app.post('/formulario', urlencodedParser, [
         console.log(errors.array());
         return res.end(JSON.stringify({ status: 'error',message: errors.array(),valores:req.body}));
     }else{
-        fs.insertData(req.body).then(function(i){
-            console.log(i);
-            return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
+        fs.queryData('SELECT * FROM costos WHERE id_costos = 1').then(function(i){
+            costo_hora = i[0]['costo_hora'];
+            puntos_de_funcion_al_mes = i[0]['puntos_funcion_mes'];
+            fs.insertData(req.body,costo_hora,puntos_de_funcion_al_mes).then(function(i){
+                console.log(i);
+                return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
+            }).catch(function(e){
+                console.log(e);
+                return res.end(JSON.stringify({ status: 'error',message: e}));
+            });
         }).catch(function(e){
-            console.log(e);
             return res.end(JSON.stringify({ status: 'error',message: e}));
         });
+
     }
 });
 
@@ -294,7 +306,7 @@ app.post('/gastos', urlencodedParser, (req, res)=>{
     costo_hora = (ingreso_anual+gastos_fijos_anuales) / horas_produccion;
     precio_venta = costo_hora + (costo_hora * 0.2)
     precio_hora_mas_impuestos = precio_venta + (precio_venta * 0.35)
-    fs.updateData('costos',{'costo_hora':costo_hora,'precio_venta':precio_venta,'costo_con_impuestos':precio_hora_mas_impuestos,'gastos_fijos_anuales':gastos_fijos_anuales,'sueldo':ingreso_anual},{'id_costos':1}).then(function(i){
+    fs.updateData('costos',{'costo_hora':costo_hora,'precio_venta':precio_venta,'costo_con_impuestos':precio_hora_mas_impuestos,'gastos_fijos_anuales':gastos_fijos_anuales,'sueldo':ingreso_anual,'puntos_funcion_mes':req.body.puntos},{'id_costos':1}).then(function(i){
         return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
     }).catch(function(e){
         return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));

@@ -1,15 +1,20 @@
 var db = require('../db');
 
-module.exports.insertData = async function(data){
+module.exports.insertData = function(data,costo_hora,puntos_funcion_mes){
     return new Promise((resolve,reject)=>{
+        var suma_puntos = getSumaElementosLista(data.puntos_cosmic);
+        var costo_subcontrataciones = getSumaElementosLista(data.costo_subcontratacion);
+        var costoPuntoFuncion =getCostoPuntoFuncion(costo_hora,8,20,puntos_funcion_mes,costo_subcontrataciones);
+        var duracion_proyecto = puntos_funcion_mes / suma_puntos;
+
         var values = [
-            [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente]
+            [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente,costoPuntoFuncion,costo_subcontrataciones,duracion_proyecto]
             ];
         try{
             db.beginTransaction(function(e){
                 if(e) reject(e.sqlMessage);
                 // Cotizado
-                db.query('INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente) VALUES ?', [values], function(e, result) { 
+                db.query('INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente, costo_punto_funcion, costo_subcontrataciones,duracion_proyecto) VALUES ?', [values], function(e, result) { 
                     if (e) { 
                         db.rollback();
                         reject(e.sqlMessage); 
@@ -35,9 +40,9 @@ module.exports.insertData = async function(data){
                         var gantt =getGantt(data.actividad,data.fecha_inicio_actividad,data.fecha_termina_actividad,data.puntos_cosmic);
                         for(i = 0; i < gantt.length; i++){
                             var value = [
-                                [gantt[i]['actividad'],gantt[i]['fecha_inicio'],gantt[i]['fecha_termina'],gantt[i]['puntos'],last_inserted_id]
+                                [gantt[i]['actividad'],gantt[i]['fecha_inicio'],gantt[i]['fecha_termina'],gantt[i]['puntos'],last_inserted_id,costo_punto_funcion*parseFloat(gantt[i]['puntos'])]
                             ];
-                            module.exports.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado) VALUES ?',value).then(function(i){
+                            module.exports.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado, costo) VALUES ?',value).then(function(i){
                                 console.log(i);
                             }).catch(function(e){
                                 db.rollback();
@@ -139,6 +144,21 @@ const getResponsabilidades = (lista_responsabilidades,lista_responsable)=>{
     }
     return lista;
   }
+
+const getCostoPuntoFuncion = (costo_hora,horas_dia,dias_mes,puntos_funcion_mensuales,costo_subcontrataciones)=>{
+    if (costo_subcontrataciones === undefined) costo_subcontrataciones = 0;
+    costo_mensual = (parseFloat(costo_hora) * parseFloat(horas_dia) * parseFloat(dias_mes)) + costo_subcontrataciones;
+    costo_punto_funcion =  costo_mensual / parseInt(puntos_funcion_mensuales);
+    return costo_punto_funcion;
+}
+
+const getSumaElementosLista = (lista)=>{
+    if(Array.isArray(lista)==false){
+        return parseFloat(lista);
+    }
+    var suma = lista.reduce((x, y) => parseInt(x) + parseInt(y));
+     return suma; 
+}
 
 module.exports.deleteItem = function(table,where){
     return new Promise((resolve, reject)=>{
