@@ -35,7 +35,7 @@
     </div>
   </nav>
   <!-- Navbar -->
-<div class="container">
+<div class="container mb-4">
     <a class="btn btn-primary mt-3" style="text-decoration:none;color:white;" href="/"><i class="fa fa-arrow-left"></i> Regresar</a>
     <button class="btn btn-danger mt-3" data-target="<%=id_cotizado%>" id="delete_all"><i class="fa fa-trash"></i> Borrar cotización</button>
     <button class="btn btn-secondary mt-3" data-target="<%=id_cotizado%>" id="editar-cotizado" data-bs-toggle="modal" data-bs-target="#modalView"><i class="fa fa-edit" ></i> Editar cotización</button>
@@ -48,14 +48,6 @@
                         <th scope="col">Nombre cliente</th>
                         <th scope="col">Nombre empresa</th>
                         <th scope="col">Email cliente</th>
-                        <th scope="col">Problema</th>
-                        <th scope="col">Objetivo</th>
-                        <th scope="col">Alcance</th>
-                        <th scope="col">Factibilidad</th>
-                        <th scope="col">Presupuesto cliente</th>
-                        <th scope="col">Tiempo de entregas semanas</th>
-                        <th scope="col">Observaciones gantt</th>
-                        <th scope="col">Costo final</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,14 +56,57 @@
                         <td><%=nombre_cliente%></td>
                         <td><%=nombre_empresa%></td>
                         <td><%=email%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-5 mb-3">
+        <div class="col-12">
+            <table class="table table-bordered  table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Problema</th>
+                        <th scope="col">Objetivo</th>
+                        <th scope="col">Alcance</th>
+                        <th scope="col">Factibilidad</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td><%=problema%></td>
                         <td><%=objetivo%></td>
                         <td><%=alcance%></td>
                         <td><%=factibilidad%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-5 mb-3">
+        <div class="col-12">
+            <table class="table table-bordered  table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Presupuesto cliente</th>
+                        <th scope="col">Tiempo de entregas semanas</th>
+                        <th scope="col">Observaciones gantt</th>
+                        <th scope="col">Costo punto de función</th>
+                        <th scope="col">Costo subcontrataciones</th>
+                        <th scope="col">Costo final</th>
+                        <th scope="col">Duración del proyecto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td><%=presupuesto%></td>
                         <td><%=tiempo_entrega%></td>
                         <td><%=observaciones_gantt%></td>
+                        <td><%=costo_punto_funcion%></td>
+                        <td><%=costo_subcontrataciones%></td>
                         <td><%=costo_final%></td>
+                        <td><%=duracion_proyecto%> meses</td>
                     </tr>
                 </tbody>
             </table>

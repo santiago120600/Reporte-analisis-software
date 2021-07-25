@@ -62,6 +62,7 @@
         var actividades = '<%=actividades%>'.split(",");
         var fecha_inicio = '<%=fecha_inicio%>'.split(",");
         var fecha_termina = '<%=fecha_termina%>'.split(",");
+        var costo = '<%=costo%>'.split(",");
 
         function showGantt(){
           g = new JSGantt.GanttChart('g',document.getElementById('gantt'), 'day');
@@ -70,7 +71,7 @@
           g.setDateDisplayFormat('yyyy-mm-dd') // Set format to display dates ('mm/dd/yyyy', 'dd/mm/yyyy', 'yyyy-mm-dd')
           g.setFormatArr("day") // Set format options (up to 4 : "minute","hour","day","week","month","quarter")
           for (i = 0; i < actividades.length; i++) {
-            g.AddTaskItem(new JSGantt.TaskItem(i,actividades[i],fecha_inicio[i],fecha_termina[i],'ff6666','','','$'));
+            g.AddTaskItem(new JSGantt.TaskItem(i,actividades[i],fecha_inicio[i],fecha_termina[i],'ff6666','','',`$ ${costo[i]}`));
           }
           // TaskItem(pID, pName, pStart, pEnd, pColor, pLink, pMile, pRes, pComp, pGroup, pParent, pOpen, pDepend)
           g.Draw();	

@@ -198,15 +198,18 @@ module.exports.listToStringGantt = function(arrayOfObjects){
     lista_actividades = [];
     lista_fecha_inicio = [];
     lista_fecha_termina = [];
+    lista_costos = [];
     arrayOfObjects.forEach((value)=>{
         lista_actividades.push(value['actividad']);
         lista_fecha_inicio.push(convertDate(value['fecha_inicio_actividad']));
         lista_fecha_termina.push(convertDate(value['fecha_termina_actividad']));
+        lista_costos.push(value['costo']);
     });
     string_actividades =lista_actividades.toString();
     string_fecha_inicio =lista_fecha_inicio.toString();
     string_fecha_termina =lista_fecha_termina.toString();
-    return {'actividades':string_actividades,'fecha_inicio':string_fecha_inicio,'fecha_termina':string_fecha_termina};
+    string_costos =lista_costos.toString();
+    return {'actividades':string_actividades,'fecha_inicio':string_fecha_inicio,'fecha_termina':string_fecha_termina,'costo':string_costos};
 }
 
 module.exports.deleteAll = function(id){

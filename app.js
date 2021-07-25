@@ -26,7 +26,7 @@ app.get('/general', async (req, res) => {
     var gantt =  await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id_proyecto} ORDER BY fecha_inicio_actividad`);
     var subcontrataciones =  await fs.queryData(`SELECT * FROM subcontrataciones WHERE id_cotizado = ${id_proyecto}`);
     var responsabilidades =  await fs.queryData(`SELECT * FROM responsabilidades WHERE id_cotizado = ${id_proyecto}`);
-    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], problema:cotizado[0]['problema'],objetivo:cotizado[0]['objetivo_gral'],alcance:cotizado[0]['alcance_proyecto'],factibilidad:cotizado[0]['factibilidad'],presupuesto:cotizado[0]['presupuesto_cliente'],tiempo_entrega:cotizado[0]['tiempo_entrega_semanas'],observaciones_gantt:cotizado[0]['observaciones_gantt'],costo_final:cotizado[0]['costo_final']});
+    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], problema:cotizado[0]['problema'],objetivo:cotizado[0]['objetivo_gral'],alcance:cotizado[0]['alcance_proyecto'],factibilidad:cotizado[0]['factibilidad'],presupuesto:cotizado[0]['presupuesto_cliente'],tiempo_entrega:cotizado[0]['tiempo_entrega_semanas'],observaciones_gantt:cotizado[0]['observaciones_gantt'],costo_final:cotizado[0]['costo_final'],costo_punto_funcion:cotizado[0]['costo_punto_funcion'],costo_subcontrataciones:cotizado[0]['costo_subcontrataciones'],duracion_proyecto:cotizado[0]['duracion_proyecto']});
 });
 
 app.get('/costos', (req, res) => {
@@ -124,7 +124,7 @@ app.get('/gantt', (req, res) => {
     var id =req.query.id_cotizacion;
     fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id}`).then(function(value){
         result = fs.listToStringGantt(value);
-        return res.render('gantt',{actividades:result['actividades'],fecha_inicio:result['fecha_inicio'],fecha_termina:result['fecha_termina'],id:id,});
+        return res.render('gantt',{actividades:result['actividades'],fecha_inicio:result['fecha_inicio'],fecha_termina:result['fecha_termina'],costo:result['costo'],id:id,});
     }).catch(function(e){
         console.log(e);
     });
@@ -184,6 +184,8 @@ app.post('/cotizadoEditForm', urlencodedParser, (req, res) =>{
 app.post('/savecliente', urlencodedParser, (req, res)=>{
     if(req.body.id_cliente!=''){
         id_cotizacion = req.body.id_cotizacion;
+        console.log("id_cotizacion");
+        console.log(id_cotizacion);
         fs.updateData('cliente',{
             'nombre_cliente':req.body.nombre_cliente,
             'nombre_empresa':req.body.nombre_empresa,
