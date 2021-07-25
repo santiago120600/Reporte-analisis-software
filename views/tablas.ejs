@@ -27,6 +27,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/costos?id_cotizacion=<%=id_cotizado%>">Costos</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/clientes?id_cotizacion=<%=id_cotizado%>">Clientes</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -53,7 +56,6 @@
                         <th scope="col">Tiempo de entregas semanas</th>
                         <th scope="col">Observaciones gantt</th>
                         <th scope="col">Costo final</th>
-                        <th scope="col">Estimación</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,7 +72,6 @@
                         <td><%=tiempo_entrega%></td>
                         <td><%=observaciones_gantt%></td>
                         <td><%=costo_final%></td>
-                        <td><%=estimacion%></td>
                     </tr>
                 </tbody>
             </table>

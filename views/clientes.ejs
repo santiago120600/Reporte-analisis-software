@@ -35,7 +35,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/clientes?id_cotizacion=<%=id%>">Clientes</a>
-                      </li>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -44,42 +44,56 @@
     <div class="container">
         <a class="btn btn-primary mt-3" style="text-decoration:none;color:white;" href="/"><i
                 class="fa fa-arrow-left"></i> Regresar</a>
+
         <div class="row mt-5 mb-3">
             <div class="col-12">
                 <table class="table table-bordered  table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Costo hora</th>
-                            <th scope="col">Precio venta</th>
-                            <th scope="col">Costo con impuestos</th>
-                            <th scope="col">Gastos fijos anuales</th>
-                            <th scope="col">Sueldo</th>
-                            <th scope="col">Puntos de función promedio mensuales</th>
+                            <th scope="col">#</th>
+                            <td>Nombre cliente</td>
+                            <td>Nombre empresa</td>
+                            <td>Email</td>
+                            <td>Teléfono</td>
+                            <td>Dirección</td>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <%=costo_hora%>
-                            </td>
-                            <td>
-                                <%=precio_venta%>
-                            </td>
-                            <td>
-                                <%=costo_impuestos%>
-                            </td>
-                            <td>
-                                <%=gastos%>
-                            </td>
-                            <td>
-                                <%=sueldo%>
-                            </td>
-                            <td>
-                                <%=puntos%>
-                            </td>
-                        </tr>
+                        <% clientes.forEach(function(value, index){ %>
+                            <tr>
+                                <td>
+                                    <%=value['id_cliente']%>
+                                </td>
+                                <td>
+                                    <%=value['nombre_cliente']%>
+                                </td>
+                                <td>
+                                    <%=value['nombre_empresa']%>
+                                </td>
+                                <td>
+                                    <%=value['email']%>
+                                </td>
+                                <td>
+                                    <%=value['tel']%>
+                                </td>
+                                <td>
+                                    <%=value['direccion']%>
+                                </td>
+                                <td><button type="button" class="btn btn-danger" id="delete-cliente"
+                                        data-cotizado="<%= id %>" data-target="<%= value['id_cliente'] %>"><i
+                                            class="fa fa-minus"></i></button></td>
+                            </tr>
+                            <% }); %>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalView" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modalContent">
             </div>
         </div>
     </div>
@@ -89,6 +103,7 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"
         integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/script.js"></script>
 </body>
 

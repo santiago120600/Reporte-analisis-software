@@ -164,7 +164,7 @@ module.exports.deleteItem = function(table,where){
     return new Promise((resolve, reject)=>{
         var sql = `DELETE FROM ${table} WHERE ?`;
         db.query(sql, [where],function (err, result) {
-            return err ? reject(error) : resolve(result);
+            return err ? reject(err) : resolve(result);
 
         });
     });

@@ -36,7 +36,6 @@ CREATE TABLE cotizado(
     tiempo_entrega_semanas INT,
     observaciones_gantt TEXT,
     costo_final  DOUBLE,
-    estimacion DOUBLE,
     id_cliente INT NOT NULL,
     FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente),
     costo_punto_funcion DOUBLE,

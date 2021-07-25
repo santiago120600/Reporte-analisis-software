@@ -26,7 +26,7 @@ app.get('/general', async (req, res) => {
     var gantt =  await fs.queryData(`SELECT * FROM gantt WHERE id_cotizado = ${id_proyecto} ORDER BY fecha_inicio_actividad`);
     var subcontrataciones =  await fs.queryData(`SELECT * FROM subcontrataciones WHERE id_cotizado = ${id_proyecto}`);
     var responsabilidades =  await fs.queryData(`SELECT * FROM responsabilidades WHERE id_cotizado = ${id_proyecto}`);
-    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], problema:cotizado[0]['problema'],objetivo:cotizado[0]['objetivo_gral'],alcance:cotizado[0]['alcance_proyecto'],factibilidad:cotizado[0]['factibilidad'],presupuesto:cotizado[0]['presupuesto_cliente'],tiempo_entrega:cotizado[0]['tiempo_entrega_semanas'],observaciones_gantt:cotizado[0]['observaciones_gantt'],costo_final:cotizado[0]['costo_final'],estimacion:cotizado[0]['estimacion']});
+    return res.render('tablas',{id_cotizado:cotizado[0]['id_cotizado'],acuerdos:acuerdos,gantt:gantt,subcontrataciones:subcontrataciones,responsabilidades:responsabilidades,nombre_proyecto:cotizado[0]['nombre_proyecto'],nombre_cliente:cotizado[0]['nombre_cliente'], nombre_empresa:cotizado[0]['nombre_empresa'], email:cotizado[0]['email'], problema:cotizado[0]['problema'],objetivo:cotizado[0]['objetivo_gral'],alcance:cotizado[0]['alcance_proyecto'],factibilidad:cotizado[0]['factibilidad'],presupuesto:cotizado[0]['presupuesto_cliente'],tiempo_entrega:cotizado[0]['tiempo_entrega_semanas'],observaciones_gantt:cotizado[0]['observaciones_gantt'],costo_final:cotizado[0]['costo_final']});
 });
 
 app.get('/costos', (req, res) => {
@@ -34,6 +34,16 @@ app.get('/costos', (req, res) => {
     fs.queryData('SELECT * FROM costos WHERE id_costos = 1')
     .then(function(i){
           res.render('costos',{costo_hora:i[0]['costo_hora'],precio_venta:i[0]['precio_venta'],costo_impuestos:i[0]['costo_con_impuestos'],gastos:i[0]['gastos_fijos_anuales'],sueldo:i[0]['sueldo'],id:id_cotizacion,puntos:i[0]['puntos_funcion_mes']});
+    }).catch(function(e){
+    console.log(e.sqlMessage);
+    });
+});
+
+app.get('/clientes', (req, res) => {
+    id_cotizacion = req.query.id_cotizacion;
+    fs.queryData('SELECT * FROM cliente')
+    .then(function(i){
+          res.render('clientes',{'clientes':i,'id':id_cotizacion});
     }).catch(function(e){
     console.log(e.sqlMessage);
     });
@@ -214,6 +224,15 @@ app.post('/deleteAcuerdo', urlencodedParser, (req, res)=>{
         return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
     }).catch(function(e){
         return res.end(JSON.stringify({ status: 'error',message:e }));
+    });
+});
+
+app.post('/deleteCliente', urlencodedParser, (req, res)=>{
+    id =req.body.id;
+    fs.deleteItem('cliente',{'id_cliente':id}).then(function(i){
+        return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
+    }).catch(function(e){
+        return res.end(JSON.stringify({ status: 'error',message:e.sqlMessage }));
     });
 });
 

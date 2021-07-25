@@ -483,5 +483,40 @@ $(function(){
         $(this).attr('href',`general?id_cotizacion=${id}`);
     });
 
+    $(document).on('click', '#delete-cliente', function(e) {
+        e.preventDefault();
+        id = $(this).attr('data-target');
+        id_cotizado = $(this).attr('data-cotizado');
+        Swal.fire({
+            title: '¿Eliminar?',
+            showDenyButton: true,
+            confirmButtonText: `Continuar`,
+            denyButtonText: `Cancelar`,
+            icon: 'warning'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    'url': '/deleteCliente',
+                    'data': {"id":id},
+                    'method': "post",
+                    'success': function(response) {
+                        var convert_response = JSON.parse(response);
+                        if (convert_response.status == "success") {
+                            window.location = `/clientes?id_cotizacion=${id_cotizado}`;
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                convert_response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.close()
+            }
+        });
+    });
+
 });
 
