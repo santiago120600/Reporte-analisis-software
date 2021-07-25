@@ -42,7 +42,7 @@ CREATE TABLE cotizado(
     costo_subcontrataciones DOUBLE,
     duracion_proyecto DOUBLE
 );
-INSERT INTO cotizado VALUES(null,'proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,'Observacion gantt',null,null,1,null,null,null);
+INSERT INTO cotizado VALUES(null,'proyecto juan','problema','objetivo general','alcance','Es factible',9000,8,'Observacion gantt',null,1,null,null,null);
 
 CREATE  TABLE acuerdos(
     id_acuerdos INT PRIMARY KEY AUTO_INCREMENT,

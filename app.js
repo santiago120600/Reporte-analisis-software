@@ -52,11 +52,12 @@ app.get('/clientes', (req, res) => {
 app.get('/clientesform', (req, res) => {
     id_cliente = req.query.id_cliente;
     if(typeof id_cliente == 'undefined'){
-        return res.render('clientes_form',{'id_cliente':'','nombre_cliente':'','nombre_empresa':'','email':'','tel':'','direccion':''});
+        return res.render('clientes_form',{'id_cliente':'','nombre_cliente':'','nombre_empresa':'','email':'','tel':'','direccion':'','id_cotizacion':''});
     }else{
+        id_cotizacion = req.query.id_cotizacion;
         fs.queryData(`SELECT * FROM cliente WHERE id_cliente = ${id_cliente}`)
         .then(function(i){
-            return res.render('clientes_form',{'id_cliente':id_cliente,'nombre_cliente':i[0]['nombre_cliente'],'nombre_empresa':i[0]['nombre_empresa'],'email':i[0]['email'],'tel':i[0]['tel'],'direccion':i[0]['direccion']});
+            return res.render('clientes_form',{'id_cliente':id_cliente,'nombre_cliente':i[0]['nombre_cliente'],'nombre_empresa':i[0]['nombre_empresa'],'email':i[0]['email'],'tel':i[0]['tel'],'direccion':i[0]['direccion'],'id_cotizacion':id_cotizacion});
         }).catch(function(e){
             console.log(e.sqlMessage);
         });
@@ -160,10 +161,8 @@ app.post('/formulario', urlencodedParser, [
             costo_hora = i[0]['costo_hora'];
             puntos_de_funcion_al_mes = i[0]['puntos_funcion_mes'];
             fs.insertData(req.body,costo_hora,puntos_de_funcion_al_mes).then(function(i){
-                console.log(i);
                 return res.end(JSON.stringify({ status: 'success',message:'Reistrado correctamente'}));
             }).catch(function(e){
-                console.log(e);
                 return res.end(JSON.stringify({ status: 'error',message: e}));
             });
         }).catch(function(e){
@@ -184,8 +183,6 @@ app.post('/cotizadoEditForm', urlencodedParser, (req, res) =>{
 app.post('/savecliente', urlencodedParser, (req, res)=>{
     if(req.body.id_cliente!=''){
         id_cotizacion = req.body.id_cotizacion;
-        console.log("id_cotizacion");
-        console.log(id_cotizacion);
         fs.updateData('cliente',{
             'nombre_cliente':req.body.nombre_cliente,
             'nombre_empresa':req.body.nombre_empresa,
