@@ -6,15 +6,16 @@ module.exports.insertData = function(data,costo_hora,puntos_funcion_mes){
         var costo_subcontrataciones = getSumaElementosLista(data.costo_subcontratacion);
         var costoPuntoFuncion =getCostoPuntoFuncion(costo_hora,8,20,puntos_funcion_mes,costo_subcontrataciones);
         var duracion_proyecto = puntos_funcion_mes / suma_puntos;
+        var costo_final = suma_puntos * costo_punto_funcion;
 
         var values = [
-            [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente,costoPuntoFuncion,costo_subcontrataciones,duracion_proyecto]
+            [data.nombre_proyecto,data.problema,data.objetivo_gral,data.alcance_proyecto,data.factibilidad,data.presupuesto_cliente,data.tiempo_entrega,data.observaciones_gantt,data.id_cliente,costoPuntoFuncion,costo_subcontrataciones,duracion_proyecto,costo_final]
             ];
         try{
             db.beginTransaction(function(e){
                 if(e) reject(e.sqlMessage);
                 // Cotizado
-                db.query('INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente, costo_punto_funcion, costo_subcontrataciones,duracion_proyecto) VALUES ?', [values], function(e, result) { 
+                db.query('INSERT INTO cotizado (nombre_proyecto, problema, objetivo_gral, alcance_proyecto, factibilidad,  presupuesto_cliente,tiempo_entrega_semanas, observaciones_gantt,id_cliente, costo_punto_funcion, costo_subcontrataciones,duracion_proyecto, costo_final) VALUES ?', [values], function(e, result) { 
                     if (e) { 
                         db.rollback();
                         reject(e.sqlMessage); 

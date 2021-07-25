@@ -137,10 +137,15 @@ app.get('/', (req, res) => {
         var proyecto = i;
         fs.queryData('SELECT * FROM cliente').then(function(i){
             if(i.length != 0){
-                res.render('selection',{proyecto:proyecto,clientes:true});
+                clientes_empty = true;
             }else{
-                res.render('selection',{proyecto:proyecto,clientes:false});
+                clientes_empty = false;
             }
+            fs.queryData('SELECT * FROM costos WHERE id_costos = 1').then(function(i){
+                return res.render('selection',{proyecto:proyecto,clientes:clientes_empty,costo_hora:i[0]['costo_hora'],precio_venta:i[0]['precio_venta'],costo_impuestos:i[0]['costo_con_impuestos'],gastos:i[0]['gastos_fijos_anuales'],sueldo:i[0]['sueldo'],puntos:i[0]['puntos_funcion_mes']});
+            }).catch(function(e){
+                console.log(e.sqlMessage);
+            });
         }).catch(function(e){
             console.log(e.sqlMessage);
         });

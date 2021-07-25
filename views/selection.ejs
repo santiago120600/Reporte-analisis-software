@@ -1,59 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú selección</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
 <body>
     <div class="container" style="height:100vh;">
         <div class="row justify-content-center align-content-center" style="height:100vh;">
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-success" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalViewCotizado" id="openModalCotizado" <%=(clientes) ? '' : 'disabled' %> ><i class="fa fa-plus"></i> Nuevo proyecto</button>
-                <button class="btn btn-info" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView" id="openModal"><i class="fa fa-plus"></i> Nuevo Cliente</button>
-                <button class="btn btn-secondary" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView" id="openModalCostos"><i class="fa fa-clipboard"></i> Gastos</button>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-success" style="color:white;" data-bs-toggle="modal"
+                            data-bs-target="#modalViewCotizado" id="openModalCotizado" <%=(clientes) ? '' : 'disabled'
+                            %>
+                            ><i class="fa fa-plus"></i> Nuevo proyecto</button>
+                        <button class="btn btn-info" style="color:white;" data-bs-toggle="modal"
+                            data-bs-target="#modalView" id="openModal"><i class="fa fa-plus"></i> Nuevo Cliente</button>
+                        <button class="btn btn-secondary" style="color:white;" data-bs-toggle="modal"
+                            data-bs-target="#modalView" id="openModalCostos"><i class="fa fa-clipboard"></i>
+                            Gastos</button>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <% if( proyecto.length !=0 ){ %>
+                            <h5>Proyecto existente</h5>
+                            <form>
+                                <select class="form-select" name="project" id="select_project">
+                                    <% proyecto.forEach(function(value, index){ %>
+                                        <option value="<%=value.id_cotizado%>">
+                                            <%=value.nombre_proyecto%>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <a id="project_select" class="btn btn-primary mt-3" href="#">Elegir</a>
+                            </form>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <table class="table table-bordered  table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Costo hora</th>
+                            <th scope="col">Precio venta</th>
+                            <th scope="col">Costo con impuestos</th>
+                            <th scope="col">Gastos fijos anuales</th>
+                            <th scope="col">Sueldo</th>
+                            <th scope="col">Puntos de función promedio mensuales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <%=costo_hora%>
+                            </td>
+                            <td>
+                                <%=precio_venta%>
+                            </td>
+                            <td>
+                                <%=costo_impuestos%>
+                            </td>
+                            <td>
+                                <%=gastos%>
+                            </td>
+                            <td>
+                                <%=sueldo%>
+                            </td>
+                            <td>
+                                <%=puntos%>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col">
-                <% if( proyecto.length != 0 ){ %>
-                    <h5>Proyecto existente</h5>
-                    <form>
-                        <select class="form-select" name="project" id="select_project">
-                            <% proyecto.forEach(function(value, index){ %>
-                                <option value="<%=value.id_cotizado%>"><%=value.nombre_proyecto%></option>
-                        <% }); %>
-                        </select>
-                    <a id="project_select"  class="btn btn-primary mt-3" href="#">Elegir</a>
-                    </form>
-                <% } %>
-            </div>
-        </div>
-    </div>        
-        </div>
+    </div>
 
-        <!-- Modal -->
-<div class="modal fade" id="modalView" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content" id="modalContent">
-      </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalView" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modalContent">
+            </div>
+        </div>
     </div>
-  </div>
-        <!-- Modal Cotizaion-->
-<div class="modal fade" id="modalViewCotizado" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" id="modalContentCotizado">
-      </div>
+    <!-- Modal Cotizaion-->
+    <div class="modal fade" id="modalViewCotizado" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="modalContentCotizado">
+            </div>
+        </div>
     </div>
-  </div>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="js/script.js"></script>
 </body>
-</html>
 
+</html>

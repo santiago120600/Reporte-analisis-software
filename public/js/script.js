@@ -101,11 +101,7 @@ $(function(){
                 var convert_response = JSON.parse(response);
                 if (convert_response.status == "success") {
                     $(document).find('#modalView').modal('hide');
-                    Swal.fire(
-                        'Correcto',
-                        convert_response.message,
-                        'success'
-                    );
+                    window.location = "/";
                 }else{
                     Swal.fire(
                         'Error',
