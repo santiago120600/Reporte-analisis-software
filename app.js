@@ -51,7 +51,16 @@ app.get('/clientes', (req, res) => {
 
 app.get('/clientesform', (req, res) => {
     id_cliente = req.query.id_cliente;
-    return res.render('clientes_form',{'id_cliente':id_cliente});
+    if(typeof id_cliente == 'undefined'){
+        return res.render('clientes_form',{'id_cliente':'','nombre_cliente':'','nombre_empresa':'','email':'','tel':'','direccion':''});
+    }else{
+        fs.queryData(`SELECT * FROM cliente WHERE id_cliente = ${id_cliente}`)
+        .then(function(i){
+            return res.render('clientes_form',{'id_cliente':id_cliente,'nombre_cliente':i[0]['nombre_cliente'],'nombre_empresa':i[0]['nombre_empresa'],'email':i[0]['email'],'tel':i[0]['tel'],'direccion':i[0]['direccion']});
+        }).catch(function(e){
+            console.log(e.sqlMessage);
+        });
+    }
 });
 
 app.get('/acuerdosform', (req, res) => {
