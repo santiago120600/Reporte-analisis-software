@@ -13,18 +13,18 @@
         <div class="row justify-content-center align-content-center" style="height:100vh;">
         <div class="row">
             <div class="col">
-                <button class="btn btn-success" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalViewCotizado" id="openModalCotizado"><i class="fa fa-plus"></i> Nuevo proyecto</button>
+                <button class="btn btn-success" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalViewCotizado" id="openModalCotizado" <%=(clientes) ? '' : 'disabled' %> ><i class="fa fa-plus"></i> Nuevo proyecto</button>
                 <button class="btn btn-info" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView" id="openModal"><i class="fa fa-plus"></i> Nuevo Cliente</button>
                 <button class="btn btn-secondary" style="color:white;" data-bs-toggle="modal" data-bs-target="#modalView" id="openModalCostos"><i class="fa fa-clipboard"></i> Gastos</button>
             </div>
         </div>
         <div class="row mt-5">
             <div class="col">
-                <% if( data.length != 0 ){ %>
+                <% if( proyecto.length != 0 ){ %>
                     <h5>Proyecto existente</h5>
                     <form>
                         <select class="form-select" name="project" id="select_project">
-                            <% data.forEach(function(value, index){ %>
+                            <% proyecto.forEach(function(value, index){ %>
                                 <option value="<%=value.id_cotizado%>"><%=value.nombre_proyecto%></option>
                         <% }); %>
                         </select>

@@ -131,13 +131,23 @@ app.get('/gantt', (req, res) => {
     });
 });
 
-app.get('/', async (req, res) => {
-    try{
-        var data = await fs.queryData('SELECT id_cotizado, nombre_proyecto FROM cotizado');
-        res.render('selection',{data:data});
-    }catch(e){
-        console.log(e);
-    }
+app.get('/', (req, res) => {
+    fs.queryData('SELECT id_cotizado, nombre_proyecto FROM cotizado')
+    .then(function(i){
+        var proyecto = i;
+        fs.queryData('SELECT * FROM cliente').then(function(i){
+            if(i.length != 0){
+                res.render('selection',{proyecto:proyecto,clientes:true});
+            }else{
+                res.render('selection',{proyecto:proyecto,clientes:false});
+            }
+        }).catch(function(e){
+            console.log(e.sqlMessage);
+        });
+    })
+    .catch(function(e){
+        console.log(e.sqlMessage);
+    });
 });
 
 app.get('/formulario',async (req, res) => {
