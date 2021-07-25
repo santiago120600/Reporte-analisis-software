@@ -50,7 +50,8 @@ app.get('/clientes', (req, res) => {
 });
 
 app.get('/clientesform', (req, res) => {
-    return res.render('clientes_form');
+    id_cliente = req.query.id_cliente;
+    return res.render('clientes_form',{'id_cliente':id_cliente});
 });
 
 app.get('/acuerdosform', (req, res) => {
@@ -172,15 +173,30 @@ app.post('/cotizadoEditForm', urlencodedParser, (req, res) =>{
 });
 
 app.post('/savecliente', urlencodedParser, (req, res)=>{
-    var values = [
-        [req.body.nombre_cliente,req.body.nombre_empresa,req.body.email,req.body.tel,req.body.direccion]
-    ];
-    fs.saveData('INSERT INTO cliente (nombre_cliente,nombre_empresa,email,tel,direccion) VALUES ?',values)
-    .then(function(value){
-        return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
-    }).catch(function(value){
-        return res.end(JSON.stringify({ status: 'error',message:value }));
-    });
+    if(req.body.id_cliente!=''){
+        id_cotizacion = req.body.id_cotizacion;
+        fs.updateData('cliente',{
+            'nombre_cliente':req.body.nombre_cliente,
+            'nombre_empresa':req.body.nombre_empresa,
+            'email':req.body.email,
+            'tel':req.body.tel,
+            'direccion':req.body.direccion
+        },{'id_cliente':req.body.id_cliente}).then(function(i){
+            return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente',method:'update',data:id_cotizacion }));
+        }).catch(function(e){
+            return res.end(JSON.stringify({ status: 'error',message:e.sqlMessage }));
+        });
+    }else{
+        var values = [
+            [req.body.nombre_cliente,req.body.nombre_empresa,req.body.email,req.body.tel,req.body.direccion]
+        ];
+        fs.saveData('INSERT INTO cliente (nombre_cliente,nombre_empresa,email,tel,direccion) VALUES ?',values)
+        .then(function(value){
+            return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente',method:'post' }));
+        }).catch(function(value){
+            return res.end(JSON.stringify({ status: 'error',message:value }));
+        });
+    }
 });
 
 app.post('/deleteAll', urlencodedParser, (req, res)=>{

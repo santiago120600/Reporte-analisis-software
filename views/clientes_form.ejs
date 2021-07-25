@@ -4,6 +4,7 @@
 </div>
 <form id="form_clientes">
     <div class="modal-body">
+      <input type="hidden" name="id_cliente" value="<%=(typeof id_cliente != undefined ? id_cliente : '')%>">
         <div class="mb-3">
             <label for="nombre_cliente" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nombre_cliente" name="nombre_cliente" required>

@@ -36,6 +36,19 @@ $(function(){
         });
     });
 
+    $(document).on('click', '#edit-cliente', function(e) {
+        e.preventDefault();
+        id_cliente = $(this).attr('data-target');
+        id_cotizacion = $(this).attr('data-cotizado');
+        $.ajax({
+            'url': '/clientesform',
+            'data': {'id_cliente':id_cliente,'id_cotizacion':id_cotizacion},
+            'success': function(response) {
+                $(document).find('#modalContent').empty().append(response);
+            }
+        });
+    });
+
     $(document).on('click', '#openModalCostos', function(e) {
         e.preventDefault();
         $.ajax({
@@ -56,11 +69,16 @@ $(function(){
                 var convert_response = JSON.parse(response);
                 if (convert_response.status == "success") {
                     $(document).find('#modalView').modal('hide');
-                    Swal.fire(
-                        'Correcto',
-                        convert_response.message,
-                        'success'
-                    );
+                    if(convert_response.method=='update'){
+                        id_cotizado = convert_response.data;
+                        window.location = `/clientes?id_cotizacion=${id_cotizado}`;
+                    }else{
+                        Swal.fire(
+                            'Correcto',
+                            convert_response.message,
+                            'success'
+                        );
+                    }
                 }else{
                     Swal.fire(
                         'Error',

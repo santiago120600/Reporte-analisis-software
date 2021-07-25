@@ -82,7 +82,10 @@
                                 </td>
                                 <td><button type="button" class="btn btn-danger" id="delete-cliente"
                                         data-cotizado="<%= id %>" data-target="<%= value['id_cliente'] %>"><i
-                                            class="fa fa-minus"></i></button></td>
+                                            class="fa fa-minus"></i></button> <button type="button"
+                                        class="btn btn-primary" id="edit-cliente" data-bs-toggle="modal" data-bs-target="#modalView" data-cotizado="<%= id %>"
+                                        data-target="<%= value['id_cliente'] %>"><i class="fa fa-edit"></i></button>
+                                </td>
                             </tr>
                             <% }); %>
                     </tbody>
