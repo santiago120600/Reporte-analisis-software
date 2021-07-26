@@ -342,13 +342,13 @@ app.post('/newActividad', urlencodedParser, (req, res)=>{
     fecha_termina = req.body.fecha_termina_actividad;
     puntos = req.body.puntos_cosmic;
     if(Array.isArray(actividades)==false){
-        values = [[actividades,fecha_inicio,fecha_termina,puntos,id_cotizado]];
+        values = [{"actividad":actividades,"fecha_inicio":fecha_inicio,"fecha_termina":fecha_termina,"puntos":puntos,"id_cotizado":id_cotizado}];
     }else{
         for (i = 0; i < actividades.length; i++) {
-            values.push([actividades[i],fecha_inicio[i],fecha_termina[i],puntos[i],id_cotizado]);
+            values.push({"actividad":actividades[i],"fecha_inicio":fecha_inicio[i],"fecha_termina":fecha_termina[i],"puntos":puntos[i],"id_cotizado":id_cotizado});
         }
     } 
-    fs.saveData('INSERT INTO gantt (actividad,fecha_inicio_actividad,fecha_termina_actividad,puntos_cosmic,id_cotizado) VALUES ?',values)
+    fs.newActivity(id_cotizado,values)
     .then(function(value){
         return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
     }).catch(function(value){
