@@ -243,7 +243,7 @@ app.post('/deleteGantt', urlencodedParser, (req, res)=>{
 
 app.post('/deleteSubcontratacion', urlencodedParser, (req, res)=>{
     id =req.body.id;
-    fs.deleteItem('subcontrataciones',{'id_subcontrataciones':id}).then(function(i){
+    fs.deleteSubcontratacion(id).then(function(i){
         return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
     }).catch(function(e){
         return res.end(JSON.stringify({ status: 'error',message:e }));
