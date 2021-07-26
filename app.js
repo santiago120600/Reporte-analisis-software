@@ -320,16 +320,18 @@ app.post('/newSubcontratacion', urlencodedParser, (req, res)=>{
     subcontrataciones = req.body.subcontrataciones;
     costo = req.body.costo_subcontratacion;
     if(Array.isArray(subcontrataciones)==false){
-        values = [[subcontrataciones,costo,id_cotizado]];
+        values = [{"subcontratacion":subcontrataciones,"costo":costo,"id_cotizado":id_cotizado}];
     }else{
         for (i = 0; i < subcontrataciones.length; i++) {
-            values.push([subcontrataciones[i],costo[i],id_cotizado]);
+            values.push({"subcontratacion":subcontrataciones[i],"costo":costo[i],"id_cotizado":id_cotizado});
         }
     } 
-    fs.saveData('INSERT INTO subcontrataciones (nombre,costo,id_cotizado) VALUES ?',values)
+    fs.newSubcontratacion(id_cotizado,values)
     .then(function(value){
+        // console.log(value);
         return res.end(JSON.stringify({ status: 'success',message:'Registrado correctamente' }));
     }).catch(function(value){
+        // console.log(value);
         return res.end(JSON.stringify({ status: 'error',message:value.sqlMessage }));
     });
 });

@@ -368,3 +368,76 @@ module.exports.newActivity = function(id_cotizado,valores){
        });
     });
 }
+module.exports.newSubcontratacion = function(id_cotizado,valores){
+    return new Promise((resolve,reject)=>{
+       module.exports.queryData(`SELECT puntos_cosmic FROM gantt WHERE id_cotizado = ${id_cotizado}`).then(function(i){
+           lista_puntos = [];
+           i.forEach((i)=>{
+               lista_puntos.push(i['puntos_cosmic']);
+            });
+            var suma_puntos = getSumaElementosLista(lista_puntos);
+
+            module.exports.queryData(`SELECT costo_subcontrataciones FROM cotizado WHERE id_cotizado =  ${id_cotizado}`).then(i=>{
+
+                var costo_subcontrataciones = i[0]['costo_subcontrataciones'];
+                lista_costo_subcontrataciones = [];
+                valores.forEach((i)=>{
+                    lista_costo_subcontrataciones.push(parseFloat(i['costo']));
+                });
+                var costo_subcontrataciones_nuevos = getSumaElementosLista(lista_costo_subcontrataciones);
+                costo_subcontrataciones = costo_subcontrataciones +costo_subcontrataciones_nuevos;
+                module.exports.queryData('SELECT * FROM costos WHERE id_costos = 1').then(i =>{
+                    var costos = i;
+                    var costoPuntoFuncion =getCostoPuntoFuncion(costos[0]['costo_hora'],8,20,costos[0]['puntos_funcion_mes'],costo_subcontrataciones);
+                    var costo_final = suma_puntos * costoPuntoFuncion;
+                    try{
+                        db.beginTransaction(function(e){
+                            if(e){
+                                db.rollback();
+                                reject(e.sqlMessage);
+                            }
+                            // actualizar cotizado
+                            db.query('UPDATE cotizado SET ? WHERE ?',[{
+                                "costo_final":costo_final,
+                                "costo_subcontrataciones":costo_subcontrataciones,
+                                "costo_punto_funcion":costoPuntoFuncion
+                            },{
+                                "id_cotizado":id_cotizado
+                            }],(e,results)=>{
+                                if(e){
+                                    db.rollback();
+                                    reject(e.sqlMessage);  
+                                }
+                            });
+                            // insertar en subcontrataciones
+                            valores.forEach((i)=>{
+                                db.query('INSERT INTO subcontrataciones(nombre,costo,id_cotizado) VALUES ?',[
+                                    [[i['subcontratacion'],i['costo'],id_cotizado]]
+                                ], function (e, result) {
+                                    if (e){
+                                        db.rollback();
+                                        reject(e.sqlMessage);  
+                                    }
+                                    });
+                            });
+                            //commit
+                            db.commit(function(e) {
+                                if (e) {
+                                    db.rollback();
+                                    reject(e.sqlMessage); 
+                                }else{
+                                    resolve("success");
+                                }
+                            });
+                        });
+                    }catch(e){
+                        db.rollback();
+                        reject(e.sqlMessage);
+                    }
+                });
+            });
+       }).catch(function(e){
+            reject(e.message); 
+       });
+    });
+}
