@@ -441,3 +441,97 @@ module.exports.newSubcontratacion = function(id_cotizado,valores){
        });
     });
 }
+
+module.exports.deleteActivity = function(id_actividad){
+    return new Promise((resolve,reject)=>{
+        module.exports.queryData(`SELECT * FROM gantt WHERE id_gantt = ${id_actividad}`).then(function(i){
+            puntos_cosmic_restar = i[0]['puntos_cosmic'];
+            id_cotizado = i[0]['id_cotizado'];
+            module.exports.queryData(`SELECT puntos_cosmic FROM gantt WHERE id_cotizado = ${id_cotizado}`).then(function(i){
+                lista_puntos = [];
+                i.forEach((i)=>{
+                    lista_puntos.push(parseFloat(i['puntos_cosmic']));
+                 });
+                 var suma_puntos = getSumaElementosLista(lista_puntos);
+                 suma_puntos = suma_puntos - puntos_cosmic_restar;
+                 module.exports.queryData(`SELECT costo_subcontrataciones FROM cotizado WHERE id_cotizado =  ${id_cotizado}`).then(i=>{
+                     var costo_subcontrataciones = i[0]['costo_subcontrataciones'];
+                     module.exports.queryData('SELECT * FROM costos WHERE id_costos = 1').then(i =>{
+                         var costos = i;
+                         var costoPuntoFuncion =getCostoPuntoFuncion(costos[0]['costo_hora'],8,20,costos[0]['puntos_funcion_mes'],costo_subcontrataciones);
+                         var duracion_proyecto = costos[0]['puntos_funcion_mes'] / suma_puntos;
+                         var costo_final = suma_puntos * costoPuntoFuncion;
+                         try{
+                             db.beginTransaction(function(e){
+                                 if(e){
+                                     db.rollback();
+                                     reject(e.sqlMessage);
+                                 }
+                                 // actualizar cotizado
+                                 db.query('UPDATE cotizado SET ? WHERE ?',[{
+                                     "costo_final":costo_final,
+                                     "costo_subcontrataciones":costo_subcontrataciones,
+                                     "duracion_proyecto":duracion_proyecto,
+                                     "costo_punto_funcion":costoPuntoFuncion
+                                 },{
+                                     "id_cotizado":id_cotizado
+                                 }],(e,results)=>{
+                                     if(e){
+                                         db.rollback();
+                                         reject(e.sqlMessage);  
+                                     }
+                                 });
+                                 // Borrar de subcontrataciones
+                                db.query(`DELETE FROM gantt WHERE id_gantt = ${id_actividad}`, function (e, result) {
+                                    if (e){
+                                        db.rollback();
+                                        reject(e.sqlMessage);  
+                                    }
+                                    });
+                                  //actualizar actividades
+                                  module.exports.queryData(`SELECT * FROM gantt WHERE id_cotizado =  ${id_cotizado}`).then(function(i){
+                                      actividades = i;
+                                      actividades.forEach((i)=>{
+                                         db.query('UPDATE gantt SET ? WHERE ?',[{
+                                             "costo":actividades['puntos_cosmic']*costoPuntoFuncion
+                                         },{
+                                             "id_gantt":i['id_gantt']
+                                         }],(e,results)=>{
+                                             if(e){
+                                                 db.rollback();
+                                                 reject(e.sqlMessage);  
+                                             }
+                                         });
+                                     });
+                                 }).catch(function(e){
+                                     db.rollback();
+                                     reject(e.sqlMessage); 
+                                 });
+                                 //commit
+                                 db.commit(function(e) {
+                                     if (e) {
+                                         db.rollback();
+                                         reject(e.sqlMessage); 
+                                     }else{
+                                         resolve("success");
+                                     }
+                                 });
+                             });
+                         }catch(e){
+                             db.rollback();
+                             reject(e.sqlMessage);
+                         }
+                     });
+                 });
+            }).catch(function(e){
+                 reject(e.message); 
+            });
+
+
+
+        }).catch(function(e){
+            reject(e.sqlMessage); 
+        });
+       
+    });
+}

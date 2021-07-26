@@ -232,9 +232,11 @@ app.post('/deleteAll', urlencodedParser, (req, res)=>{
 
 app.post('/deleteGantt', urlencodedParser, (req, res)=>{
     id =req.body.id_actividad;
-    fs.deleteItem('gantt',{'id_gantt':id}).then(function(i){
+    fs.deleteActivity(id).then(function(i){
+        console.log(i);
         return res.end(JSON.stringify({ status: 'success',message:'Eliminado correctamente' }));
     }).catch(function(e){
+        console.log(e);
         return res.end(JSON.stringify({ status: 'error',message:e }));
     });
 });
